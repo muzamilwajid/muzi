@@ -675,14 +675,6 @@
       color: transparent;
     }
 
-    .profile-info .tagline {
-      font-size: 14px;
-      color: var(--text-tertiary);
-      font-weight: 400;
-      margin-bottom: 10px;
-      font-style: italic;
-    }
-
     .profile-badges {
       display: flex;
       gap: 6px;
@@ -1908,7 +1900,6 @@
         </div>
         <div class="profile-info">
           <h1>Muzamil Wajid</h1>
-          <p class="tagline">Just a Name, Many Stories <span class="typing-cursor"></span></p>
           <div class="profile-badges">
             <span class="badge accent">Developer</span>
             <span class="badge green">🎯 Open to Work</span>
@@ -2392,7 +2383,7 @@
           const extra = `DOB: ${data.age.dobPretty}\nToday: ${p.now.toDateString()}\nAge: ${ageTxt}`;
           showModal('Age', `<p style="color:var(--text-primary)">${data.age.extra}</p>`, extra);
         } else if (key === 'name') {
-          showModal('Name', `<p style="color:var(--text-primary)">Muzamil Wajid</p><p style="color:var(--text-secondary);margin-top:6px">Full: Wajid Ali</p>`, '');
+          showModal('Name', `<p style="color:var(--text-primary)">Muzamil Wajid</p><p style="color:var(--text-secondary);margin-top:6px">Full: Wajid Ali<br>Cast: Mughal</p>`, '');
         } else if (key === 'role') {
           showModal(data.role.label, `<p style="color:var(--text-primary)">${data.role.value}</p>`, data.role.extra);
         } else if (key === 'location') {
