@@ -8,6 +8,7 @@
   <title>Muzamil Wajid — Introductive Site</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
     rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg1: #06070a;
@@ -15,6 +16,7 @@
       --bg3: #111319;
       --surface: rgba(255, 255, 255, 0.03);
       --surface-hover: rgba(255, 255, 255, 0.06);
+      --surface-active: rgba(255, 255, 255, 0.09);
       --glass-border: rgba(255, 255, 255, 0.06);
       --glass-border-hover: rgba(255, 255, 255, 0.12);
       --text-primary: #f0f2f5;
@@ -23,6 +25,7 @@
       --accent: #6c63ff;
       --accent2: #00d4aa;
       --accent3: #ff6b9d;
+      --accent4: #f7b731;
       --accent-glow: rgba(108, 99, 255, 0.15);
       --danger: #ff4757;
       --success: #2ed573;
@@ -30,7 +33,13 @@
       --modal-bg: rgba(6, 7, 10, 0.92);
       --rps-bg: linear-gradient(160deg, rgba(108, 99, 255, 0.08), rgba(0, 212, 170, 0.06));
       --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+      --card-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3);
       --transition: cubic-bezier(0.4, 0, 0.2, 1);
+      --bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
     }
 
     .light {
@@ -39,6 +48,7 @@
       --bg3: #e4e7ee;
       --surface: rgba(0, 0, 0, 0.02);
       --surface-hover: rgba(0, 0, 0, 0.05);
+      --surface-active: rgba(0, 0, 0, 0.08);
       --glass-border: rgba(0, 0, 0, 0.06);
       --glass-border-hover: rgba(0, 0, 0, 0.12);
       --text-primary: #111319;
@@ -47,10 +57,12 @@
       --accent: #5a52d5;
       --accent2: #00b894;
       --accent3: #e84393;
+      --accent4: #e17055;
       --accent-glow: rgba(90, 82, 213, 0.1);
       --modal-bg: rgba(248, 249, 252, 0.95);
       --rps-bg: linear-gradient(160deg, rgba(90, 82, 213, 0.06), rgba(0, 184, 148, 0.04));
       --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+      --card-shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.06);
     }
 
     * {
@@ -86,6 +98,87 @@
       position: relative;
     }
 
+    /* ─── Loading Screen ─── */
+    .loader-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+    }
+
+    .loader-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-spinner {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 3px solid var(--glass-border);
+      border-top-color: var(--accent);
+      border-right-color: var(--accent2);
+      animation: spinLoader 0.9s linear infinite;
+    }
+
+    .loader-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-tertiary);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: loaderPulse 1.5s ease-in-out infinite;
+    }
+
+    .loader-bar-track {
+      width: 200px;
+      height: 3px;
+      border-radius: 4px;
+      background: var(--glass-border);
+      overflow: hidden;
+    }
+
+    .loader-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      transition: width 0.3s ease;
+    }
+
+    @keyframes spinLoader {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes loaderPulse {
+
+      0%,
+      100% {
+        opacity: 0.5;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* ─── Particle Canvas ─── */
+    #particleCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     /* ─── Animated Background ─── */
     .bg-orbs {
       position: fixed;
@@ -98,43 +191,53 @@
     .bg-orbs .orb {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.4;
+      filter: blur(100px);
+      opacity: 0.35;
       animation: orbFloat 20s ease-in-out infinite;
     }
 
     .light .bg-orbs .orb {
-      opacity: 0.2;
+      opacity: 0.15;
     }
 
     .bg-orbs .orb:nth-child(1) {
-      width: 400px;
-      height: 400px;
+      width: 500px;
+      height: 500px;
       background: var(--accent);
-      top: -10%;
-      left: -5%;
+      top: -12%;
+      left: -8%;
       animation-delay: 0s;
       animation-duration: 22s;
     }
 
     .bg-orbs .orb:nth-child(2) {
-      width: 350px;
-      height: 350px;
+      width: 400px;
+      height: 400px;
       background: var(--accent2);
-      bottom: -8%;
-      right: -5%;
+      bottom: -10%;
+      right: -8%;
       animation-delay: -5s;
       animation-duration: 26s;
     }
 
     .bg-orbs .orb:nth-child(3) {
-      width: 280px;
-      height: 280px;
+      width: 350px;
+      height: 350px;
       background: var(--accent3);
       top: 50%;
       left: 50%;
       animation-delay: -10s;
       animation-duration: 30s;
+    }
+
+    .bg-orbs .orb:nth-child(4) {
+      width: 250px;
+      height: 250px;
+      background: var(--accent4);
+      top: 20%;
+      right: 15%;
+      animation-delay: -15s;
+      animation-duration: 24s;
     }
 
     @keyframes orbFloat {
@@ -145,15 +248,15 @@
       }
 
       25% {
-        transform: translate(40px, -30px) scale(1.05);
+        transform: translate(50px, -40px) scale(1.08);
       }
 
       50% {
-        transform: translate(-20px, 40px) scale(0.95);
+        transform: translate(-30px, 50px) scale(0.92);
       }
 
       75% {
-        transform: translate(30px, 20px) scale(1.02);
+        transform: translate(40px, 25px) scale(1.04);
       }
     }
 
@@ -166,9 +269,60 @@
         linear-gradient(var(--glass-border) 1px, transparent 1px),
         linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
       background-size: 60px 60px;
-      opacity: 0.3;
-      mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+      opacity: 0.25;
+      mask-image: radial-gradient(ellipse at center, black 20%, transparent 65%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 65%);
+    }
+
+    /* ─── Noise texture overlay ─── */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.015;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+    }
+
+    .light .noise-overlay {
+      opacity: 0.03;
+    }
+
+    /* ─── Scroll Reveal ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s var(--transition), transform 0.7s var(--transition);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 {
+      transition-delay: 0.08s;
+    }
+
+    .reveal-delay-2 {
+      transition-delay: 0.16s;
+    }
+
+    .reveal-delay-3 {
+      transition-delay: 0.24s;
+    }
+
+    .reveal-delay-4 {
+      transition-delay: 0.32s;
+    }
+
+    .reveal-delay-5 {
+      transition-delay: 0.40s;
+    }
+
+    .reveal-delay-6 {
+      transition-delay: 0.48s;
     }
 
     /* ─── Main Card ─── */
@@ -176,8 +330,8 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 780px;
-      border-radius: 24px;
+      max-width: 820px;
+      border-radius: var(--radius-xl);
       padding: 0;
       background: var(--surface);
       border: 1px solid var(--glass-border);
@@ -185,23 +339,43 @@
       -webkit-backdrop-filter: blur(40px) saturate(150%);
       box-shadow: var(--card-shadow);
       overflow: hidden;
-      animation: cardEnter 0.8s var(--transition) both;
+      opacity: 0;
+      transform: translateY(40px) scale(0.97);
+      transition: opacity 0.8s var(--transition), transform 0.8s var(--transition);
     }
 
-    @keyframes cardEnter {
-      from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.98);
-      }
+    .card.loaded {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
 
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+    /* Glow ring on card hover */
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3), var(--accent4));
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.5s var(--transition);
+      filter: blur(2px);
+    }
+
+    .card:hover::before {
+      opacity: 0.15;
     }
 
     .card-inner {
-      padding: 28px 28px 22px;
+      padding: 32px 32px 24px;
+    }
+
+    /* ─── Section Dividers ─── */
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glass-border-hover), transparent);
+      margin: 24px 0;
+      border: none;
     }
 
     /* ─── Top Navigation Bar ─── */
@@ -209,33 +383,52 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 28px;
+      padding: 16px 32px;
       border-bottom: 1px solid var(--glass-border);
       background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .brand-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
       background: linear-gradient(135deg, var(--accent), var(--accent2));
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 14px;
+      font-size: 13px;
       color: #fff;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s var(--bounce);
+    }
+
+    .brand-icon::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.2));
+    }
+
+    .brand-icon:hover {
+      transform: rotate(-8deg) scale(1.1);
     }
 
     .brand-text {
       font-weight: 700;
-      font-size: 14px;
+      font-size: 15px;
       letter-spacing: -0.3px;
     }
 
@@ -251,9 +444,9 @@
     }
 
     .theme-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
       border: 1px solid var(--glass-border);
       background: var(--surface);
       color: var(--text-secondary);
@@ -263,35 +456,68 @@
       justify-content: center;
       font-size: 18px;
       transition: all 0.3s var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .theme-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, var(--accent-glow), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
     }
 
     .theme-btn:hover {
       background: var(--surface-hover);
       border-color: var(--glass-border-hover);
-      transform: scale(1.05);
+      transform: scale(1.08) rotate(15deg);
+    }
+
+    .theme-btn:hover::before {
+      opacity: 1;
     }
 
     /* ─── Bismillah ─── */
     .bismillah-container {
       text-align: center;
       cursor: pointer;
-      padding: 16px 0 12px;
+      padding: 20px 0 16px;
       transition: transform 0.3s var(--transition);
+      position: relative;
     }
 
     .bismillah-container:hover {
-      transform: scale(1.02);
+      transform: scale(1.03);
+    }
+
+    .bismillah-container::after {
+      content: 'tap to read Al-Fatiha';
+      display: block;
+      font-size: 11px;
+      color: var(--text-tertiary);
+      margin-top: 6px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .bismillah-container:hover::after {
+      opacity: 1;
     }
 
     .bismillah-text {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--accent), var(--accent3), var(--accent2));
-      background-size: 200% 200%;
+      background: linear-gradient(135deg, var(--accent), var(--accent3), var(--accent2), var(--accent4));
+      background-size: 300% 300%;
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      animation: gradientShift 4s ease infinite;
+      animation: gradientShift 5s ease infinite;
     }
 
     @keyframes gradientShift {
@@ -311,11 +537,16 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 16px;
+      padding: 12px 18px;
       background: var(--surface);
-      border-radius: 12px;
-      margin-bottom: 20px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
       border: 1px solid var(--glass-border);
+      transition: border-color 0.3s;
+    }
+
+    .datetime-bar:hover {
+      border-color: var(--glass-border-hover);
     }
 
     .datetime-bar .dt-item {
@@ -324,20 +555,21 @@
       color: var(--text-secondary);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
     }
 
     .dt-icon {
-      font-size: 14px;
-      opacity: 0.7;
+      font-size: 15px;
+      opacity: 0.8;
     }
 
     /* ─── Profile Header ─── */
     .profile-section {
       display: flex;
-      gap: 20px;
+      gap: 24px;
       align-items: center;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .avatar-wrapper {
@@ -346,33 +578,42 @@
     }
 
     .avatar {
-      width: 88px;
-      height: 88px;
-      border-radius: 20px;
+      width: 96px;
+      height: 96px;
+      border-radius: var(--radius-lg);
       overflow: hidden;
       position: relative;
       cursor: pointer;
-      transition: transform 0.3s var(--transition);
+      transition: all 0.4s var(--transition);
       border: 2px solid var(--glass-border);
     }
 
     .avatar::before {
       content: '';
       position: absolute;
-      inset: -3px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+      inset: -4px;
+      border-radius: 28px;
+      background: conic-gradient(from 0deg, var(--accent), var(--accent2), var(--accent3), var(--accent4), var(--accent));
       z-index: -1;
       opacity: 0;
-      transition: opacity 0.3s var(--transition);
+      transition: opacity 0.4s var(--transition);
+      animation: avatarRingRotate 4s linear infinite paused;
     }
 
     .avatar-wrapper:hover .avatar::before {
       opacity: 1;
+      animation-play-state: running;
+    }
+
+    @keyframes avatarRingRotate {
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .avatar-wrapper:hover .avatar {
-      transform: scale(1.04);
+      transform: scale(1.06);
+      border-color: transparent;
     }
 
     .avatar img {
@@ -380,14 +621,19 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      transition: transform 0.5s var(--transition);
+    }
+
+    .avatar-wrapper:hover .avatar img {
+      transform: scale(1.08);
     }
 
     .status-dot {
       position: absolute;
       bottom: 4px;
       right: 4px;
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       background: var(--success);
       border-radius: 50%;
       border: 3px solid var(--bg1);
@@ -397,7 +643,7 @@
     .status-dot::after {
       content: '';
       position: absolute;
-      inset: -3px;
+      inset: -4px;
       border-radius: 50%;
       background: var(--success);
       opacity: 0.4;
@@ -413,26 +659,28 @@
       }
 
       50% {
-        transform: scale(1.8);
+        transform: scale(2);
         opacity: 0;
       }
     }
 
     .profile-info h1 {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 800;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.6px;
       margin-bottom: 4px;
-      background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+      background: linear-gradient(135deg, var(--text-primary) 40%, var(--accent));
       -webkit-background-clip: text;
       background-clip: text;
+      color: transparent;
     }
 
     .profile-info .tagline {
       font-size: 14px;
       color: var(--text-tertiary);
       font-weight: 400;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      font-style: italic;
     }
 
     .profile-badges {
@@ -442,7 +690,7 @@
     }
 
     .badge {
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 20px;
       font-size: 11px;
       font-weight: 600;
@@ -450,18 +698,32 @@
       border: 1px solid var(--glass-border);
       background: var(--surface);
       color: var(--text-secondary);
-      transition: all 0.2s var(--transition);
+      transition: all 0.25s var(--transition);
+      cursor: default;
     }
 
     .badge:hover {
       background: var(--surface-hover);
       border-color: var(--glass-border-hover);
+      transform: translateY(-2px);
     }
 
     .badge.accent {
       background: var(--accent-glow);
-      border-color: rgba(108, 99, 255, 0.2);
+      border-color: rgba(108, 99, 255, 0.25);
       color: var(--accent);
+    }
+
+    .badge.green {
+      background: rgba(0, 212, 170, 0.1);
+      border-color: rgba(0, 212, 170, 0.2);
+      color: var(--accent2);
+    }
+
+    .badge.pink {
+      background: rgba(255, 107, 157, 0.1);
+      border-color: rgba(255, 107, 157, 0.2);
+      color: var(--accent3);
     }
 
     /* ─── Greeting ─── */
@@ -470,7 +732,7 @@
       font-size: 18px;
       font-weight: 600;
       color: var(--text-secondary);
-      padding: 14px 0 18px;
+      padding: 16px 0 20px;
       opacity: 0;
       animation: fadeSlideUp 0.6s var(--transition) 0.3s forwards;
     }
@@ -478,7 +740,7 @@
     @keyframes fadeSlideUp {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(12px);
       }
 
       to {
@@ -487,21 +749,74 @@
       }
     }
 
+    /* ─── Quote Rotator ─── */
+    .quote-container {
+      text-align: center;
+      padding: 16px 24px;
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .quote-container:hover {
+      border-color: var(--glass-border-hover);
+      background: var(--surface-hover);
+    }
+
+    .quote-container::before {
+      content: '"';
+      position: absolute;
+      top: -8px;
+      left: 14px;
+      font-size: 64px;
+      font-weight: 900;
+      color: var(--accent);
+      opacity: 0.08;
+      font-family: Georgia, serif;
+    }
+
+    .quote-text {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      font-style: italic;
+      transition: opacity 0.4s;
+    }
+
+    .quote-text .quote-author {
+      display: block;
+      margin-top: 6px;
+      font-size: 12px;
+      font-style: normal;
+      color: var(--text-tertiary);
+      font-weight: 600;
+    }
+
     /* ─── Info Grid ─── */
     .info-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 14px;
+      margin-bottom: 24px;
     }
 
     .info-card {
       background: var(--surface);
       border: 1px solid var(--glass-border);
-      border-radius: 16px;
-      padding: 16px;
+      border-radius: var(--radius-md);
+      padding: 18px;
       cursor: pointer;
-      transition: all 0.3s var(--transition);
+      transition: all 0.35s var(--transition);
       position: relative;
       overflow: hidden;
     }
@@ -509,37 +824,59 @@
     .info-card::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--accent-glow), transparent);
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
       opacity: 0;
-      transition: opacity 0.3s var(--transition);
+      transition: opacity 0.3s;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+    }
+
+    .info-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 120%, var(--accent-glow), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.4s;
     }
 
     .info-card:hover {
       border-color: var(--glass-border-hover);
       background: var(--surface-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
     }
 
     .info-card:hover::before {
       opacity: 1;
     }
 
+    .info-card:hover::after {
+      opacity: 1;
+    }
+
     .info-card .card-icon {
-      font-size: 20px;
-      margin-bottom: 8px;
+      font-size: 22px;
+      margin-bottom: 10px;
       position: relative;
       z-index: 1;
+      transition: transform 0.3s var(--bounce);
+    }
+
+    .info-card:hover .card-icon {
+      transform: scale(1.2) rotate(-5deg);
     }
 
     .info-card .label {
       font-size: 11px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
+      letter-spacing: 1px;
       color: var(--text-tertiary);
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       position: relative;
       z-index: 1;
     }
@@ -555,19 +892,170 @@
       text-overflow: ellipsis;
     }
 
+    /* ─── Skills Section ─── */
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-tertiary);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--glass-border-hover), transparent);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .skill-item {
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      transition: all 0.3s var(--transition);
+      cursor: default;
+    }
+
+    .skill-item:hover {
+      border-color: var(--glass-border-hover);
+      background: var(--surface-hover);
+      transform: translateX(4px);
+    }
+
+    .skill-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .skill-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .skill-name .skill-icon {
+      font-size: 16px;
+    }
+
+    .skill-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .skill-bar-track {
+      width: 100%;
+      height: 4px;
+      background: var(--glass-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      width: 0%;
+      transition: width 1.2s var(--transition);
+    }
+
+    .skill-item:nth-child(2n) .skill-bar-fill {
+      background: linear-gradient(90deg, var(--accent3), var(--accent4));
+    }
+
+    /* ─── Social Links ─── */
+    .social-links {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s var(--transition);
+      cursor: pointer;
+    }
+
+    .social-link:hover {
+      border-color: var(--glass-border-hover);
+      background: var(--surface-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      color: var(--text-primary);
+    }
+
+    .social-link .social-icon {
+      font-size: 18px;
+      transition: transform 0.3s var(--bounce);
+    }
+
+    .social-link:hover .social-icon {
+      transform: scale(1.2);
+    }
+
+    .social-link.linkedin:hover {
+      border-color: #0077b5;
+      box-shadow: 0 8px 24px rgba(0, 119, 181, 0.15);
+    }
+
+    .social-link.whatsapp:hover {
+      border-color: #25d366;
+      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.15);
+    }
+
+    .social-link.tiktok:hover {
+      border-color: #00f2ea;
+      box-shadow: 0 8px 24px rgba(0, 242, 234, 0.2);
+    }
+
+    .social-link.instagram:hover {
+      border-color: #e4405f;
+      box-shadow: 0 8px 24px rgba(228, 64, 95, 0.15);
+    }
+
     /* ─── Action Buttons ─── */
     .actions {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .action-btn {
       flex: 1;
       min-width: 160px;
-      padding: 14px 20px;
-      border-radius: 14px;
+      padding: 16px 22px;
+      border-radius: var(--radius-md);
       font-weight: 700;
       font-size: 14px;
       border: none;
@@ -575,20 +1063,39 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
       transition: all 0.3s var(--transition);
       position: relative;
       overflow: hidden;
       font-family: inherit;
+      letter-spacing: 0.2px;
     }
 
     .action-btn::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent);
       opacity: 0;
       transition: opacity 0.3s;
+    }
+
+    .action-btn::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s, height 0.5s;
+    }
+
+    .action-btn:active::after {
+      width: 300px;
+      height: 300px;
     }
 
     .action-btn:hover::before {
@@ -602,23 +1109,48 @@
     .btn-rps {
       background: linear-gradient(135deg, var(--accent), #8b5cf6);
       color: #fff;
-      box-shadow: 0 4px 20px rgba(108, 99, 255, 0.3);
+      box-shadow: 0 4px 24px rgba(108, 99, 255, 0.3);
     }
 
     .btn-rps:hover {
-      box-shadow: 0 6px 28px rgba(108, 99, 255, 0.45);
-      transform: translateY(-2px);
+      box-shadow: 0 8px 36px rgba(108, 99, 255, 0.5);
+      transform: translateY(-3px);
     }
 
     .btn-calc {
       background: linear-gradient(135deg, var(--accent2), #00e5a0);
       color: #fff;
-      box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
+      box-shadow: 0 4px 24px rgba(0, 212, 170, 0.3);
     }
 
     .btn-calc:hover {
-      box-shadow: 0 6px 28px rgba(0, 212, 170, 0.45);
-      transform: translateY(-2px);
+      box-shadow: 0 8px 36px rgba(0, 212, 170, 0.5);
+      transform: translateY(-3px);
+    }
+
+    /* ─── Visit Counter ─── */
+    .visit-counter {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .visit-counter .counter-text {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: var(--surface);
+      border: 1px solid var(--glass-border);
+    }
+
+    .visit-counter .counter-num {
+      font-weight: 800;
+      color: var(--accent);
+      font-family: 'JetBrains Mono', monospace;
     }
 
     /* ─── Credit + Footer ─── */
@@ -630,11 +1162,18 @@
       padding: 4px 0;
     }
 
+    .credit strong {
+      background: linear-gradient(135deg, var(--text-secondary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
     footer {
       text-align: center;
       font-size: 12px;
       color: var(--text-tertiary);
-      padding: 16px 28px;
+      padding: 18px 32px;
       border-top: 1px solid var(--glass-border);
       background: var(--surface);
     }
@@ -644,10 +1183,12 @@
       justify-content: center;
       align-items: center;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
     .heart {
       color: var(--accent3);
+      display: inline-block;
       animation: heartbeat 1.5s ease-in-out infinite;
     }
 
@@ -659,8 +1200,93 @@
       }
 
       50% {
-        transform: scale(1.15);
+        transform: scale(1.2);
       }
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+
+    .footer-link {
+      font-size: 11px;
+      color: var(--text-tertiary);
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+    }
+
+    /* ─── Scroll to Top ─── */
+    .scroll-top-btn {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s var(--transition);
+      box-shadow: 0 4px 20px rgba(108, 99, 255, 0.3);
+    }
+
+    .scroll-top-btn.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .scroll-top-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(108, 99, 255, 0.5);
+    }
+
+    /* ─── Tooltip ─── */
+    [data-tooltip] {
+      position: relative;
+    }
+
+    [data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: var(--bg3);
+      color: var(--text-primary);
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.2s var(--transition);
+      border: 1px solid var(--glass-border);
+      z-index: 100;
+    }
+
+    [data-tooltip]:hover::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     /* ─── Modal ─── */
@@ -671,8 +1297,8 @@
       align-items: center;
       justify-content: center;
       background: var(--modal-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       z-index: 50;
       padding: 20px;
     }
@@ -685,17 +1311,17 @@
       width: 100%;
       max-width: 720px;
       background: var(--bg2);
-      border-radius: 20px;
+      border-radius: var(--radius-lg);
       border: 1px solid var(--glass-border);
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+      box-shadow: var(--card-shadow-lg);
       overflow: hidden;
-      animation: modalEnter 0.35s var(--transition);
+      animation: modalEnter 0.4s var(--transition);
     }
 
     @keyframes modalEnter {
       from {
         opacity: 0;
-        transform: scale(0.92) translateY(20px);
+        transform: scale(0.9) translateY(24px);
       }
 
       to {
@@ -710,6 +1336,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      background: var(--surface);
     }
 
     .modal-header h2 {
@@ -720,9 +1347,9 @@
     }
 
     .modal-close-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
       border: 1px solid var(--glass-border);
       background: var(--surface);
       color: var(--text-secondary);
@@ -730,21 +1357,24 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      transition: all 0.2s var(--transition);
+      font-size: 20px;
+      transition: all 0.25s var(--transition);
       font-family: inherit;
     }
 
     .modal-close-btn:hover {
       background: rgba(255, 71, 87, 0.1);
-      border-color: rgba(255, 71, 87, 0.2);
+      border-color: rgba(255, 71, 87, 0.25);
       color: var(--danger);
+      transform: rotate(90deg);
     }
 
     .modal-body {
       padding: 24px;
       text-align: center;
       color: var(--text-secondary);
+      max-height: 65vh;
+      overflow-y: auto;
     }
 
     .modal-body img {
@@ -753,7 +1383,7 @@
       height: auto;
       display: block;
       margin: 10px auto 0;
-      border-radius: 16px;
+      border-radius: var(--radius-md);
       border: 1px solid var(--glass-border);
     }
 
@@ -768,8 +1398,8 @@
     /* ─── RPS Game ─── */
     #rpsArena {
       background: var(--rps-bg);
-      border-radius: 16px;
-      padding: 20px;
+      border-radius: var(--radius-md);
+      padding: 22px;
       margin-top: 12px;
       color: var(--text-primary);
       border: 1px solid var(--glass-border);
@@ -779,41 +1409,56 @@
       background: var(--surface);
       border: 1px solid var(--glass-border);
       color: var(--text-primary);
-      border-radius: 14px;
+      border-radius: var(--radius-md);
       font-size: 15px;
       font-weight: 700;
-      padding: 12px 16px;
+      padding: 14px 18px;
       margin: 4px;
       cursor: pointer;
-      min-width: 100px;
-      transition: all 0.25s var(--transition);
+      min-width: 105px;
+      transition: all 0.3s var(--transition);
       font-family: inherit;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rpsMoveBtn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
     }
 
     .rpsMoveBtn:hover:not(:disabled) {
       background: var(--accent-glow);
       border-color: var(--accent);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(108, 99, 255, 0.2);
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 8px 24px rgba(108, 99, 255, 0.2);
+    }
+
+    .rpsMoveBtn:hover:not(:disabled)::after {
+      opacity: 1;
     }
 
     .rpsMoveBtn:active:not(:disabled) {
-      transform: scale(0.97);
+      transform: scale(0.96);
     }
 
     .rpsMoveBtn:disabled {
-      opacity: 0.4;
+      opacity: 0.35;
       cursor: not-allowed;
     }
 
     #rpsMessage {
       font-weight: 700;
-      margin: 14px 0;
-      padding: 14px;
-      border-radius: 14px;
+      margin: 16px 0;
+      padding: 16px;
+      border-radius: var(--radius-md);
       background: var(--surface);
       border: 1px solid var(--glass-border);
-      min-height: 56px;
+      min-height: 58px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -823,7 +1468,7 @@
     #rpsHistory {
       max-height: 140px;
       overflow-y: auto;
-      margin-top: 10px;
+      margin-top: 12px;
       text-align: left;
     }
 
@@ -843,17 +1488,23 @@
       flex-wrap: wrap;
       text-align: center;
       gap: 8px;
-      margin: 16px 0 4px;
+      margin: 18px 0 4px;
     }
 
     .stat-pill {
-      padding: 8px 14px;
-      border-radius: 12px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
       background: var(--surface);
       border: 1px solid var(--glass-border);
       font-weight: 700;
       font-size: 13px;
       color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+
+    .stat-pill:hover {
+      border-color: var(--glass-border-hover);
+      background: var(--surface-hover);
     }
 
     /* ─── Calculator ─── */
@@ -864,11 +1515,11 @@
       transform: translate(-50%, -50%) scale(0.85);
       opacity: 0;
       visibility: hidden;
-      width: 340px;
-      border-radius: 24px;
+      width: 360px;
+      border-radius: var(--radius-xl);
       overflow: hidden;
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
-      transition: all 0.35s var(--transition);
+      box-shadow: var(--card-shadow-lg);
+      transition: all 0.4s var(--transition);
       z-index: 1000;
       border: 1px solid var(--glass-border);
     }
@@ -894,7 +1545,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 20px;
+      padding: 18px 22px;
       border-bottom: 1px solid var(--glass-border);
     }
 
@@ -910,12 +1561,12 @@
       border: none;
       background: transparent;
       color: inherit;
-      font-size: 22px;
+      font-size: 24px;
       cursor: pointer;
-      transition: 0.3s;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      transition: all 0.3s;
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -924,13 +1575,14 @@
     .close-calc-btn:hover {
       color: var(--danger);
       background: rgba(255, 71, 87, 0.08);
+      transform: rotate(90deg);
     }
 
     .calc-toggle-input {
       appearance: none;
       -webkit-appearance: none;
-      width: 44px;
-      height: 22px;
+      width: 46px;
+      height: 24px;
       background: #475569;
       border-radius: 25px;
       position: relative;
@@ -941,8 +1593,8 @@
 
     .calc-toggle-input::before {
       content: "";
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       background: #fff;
       border-radius: 50%;
       position: absolute;
@@ -961,33 +1613,33 @@
 
     .display {
       text-align: right;
-      padding: 24px 20px;
-      font-size: 2rem;
+      padding: 28px 22px;
+      font-size: 2.1rem;
       font-weight: 600;
       background: transparent;
-      min-height: 90px;
+      min-height: 100px;
       display: flex;
       align-items: flex-end;
       justify-content: flex-end;
       word-break: break-all;
-      font-family: 'Inter', monospace;
+      font-family: 'JetBrains Mono', 'Inter', monospace;
     }
 
     .calc-buttons {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      padding: 12px 16px 20px;
+      gap: 10px;
+      padding: 14px 18px 22px;
     }
 
     .calc-buttons button {
-      padding: 16px;
+      padding: 18px;
       font-size: 16px;
       font-weight: 600;
       border: none;
-      border-radius: 14px;
+      border-radius: var(--radius-md);
       cursor: pointer;
-      transition: all 0.2s var(--transition);
+      transition: all 0.25s var(--transition);
       font-family: inherit;
     }
 
@@ -1010,11 +1662,11 @@
     }
 
     .calc-buttons button:hover {
-      transform: scale(1.06);
+      transform: scale(1.08);
     }
 
     .calc-buttons button:active {
-      transform: scale(0.95);
+      transform: scale(0.93);
     }
 
     .calc-buttons .equal {
@@ -1024,7 +1676,7 @@
     }
 
     .calc-buttons .equal:hover {
-      box-shadow: 0 4px 20px rgba(108, 99, 255, 0.4);
+      box-shadow: 0 4px 24px rgba(108, 99, 255, 0.4);
     }
 
     /* ─── Scrollbar ─── */
@@ -1047,12 +1699,13 @@
       color: var(--text-primary);
       border: 1px solid var(--glass-border);
       border-radius: 8px;
-      padding: 4px 8px;
+      padding: 6px 10px;
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       outline: none;
+      transition: border-color 0.2s;
     }
 
     #rpsGame select:focus {
@@ -1060,8 +1713,8 @@
     }
 
     .rps-reset-btn {
-      padding: 10px 20px;
-      border-radius: 12px;
+      padding: 12px 22px;
+      border-radius: var(--radius-sm);
       font-weight: 700;
       border: none;
       cursor: pointer;
@@ -1073,12 +1726,29 @@
     }
 
     .rps-reset-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 20px rgba(255, 107, 157, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(255, 107, 157, 0.35);
     }
 
     .rps-reset-btn:active {
       transform: scale(0.97);
+    }
+
+    /* ─── Typing Effect ─── */
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 2px;
+      animation: blink 0.8s step-end infinite;
+      vertical-align: text-bottom;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
     }
 
     /* ─── Responsive ─── */
@@ -1088,25 +1758,29 @@
       }
 
       .card-inner {
-        padding: 20px 18px;
+        padding: 24px 20px;
       }
 
       .top-bar {
-        padding: 14px 18px;
+        padding: 14px 20px;
       }
 
       .info-grid {
         grid-template-columns: 1fr;
       }
 
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+
       .avatar {
-        width: 72px;
-        height: 72px;
-        border-radius: 16px;
+        width: 76px;
+        height: 76px;
+        border-radius: var(--radius-md);
       }
 
       .profile-info h1 {
-        font-size: 20px;
+        font-size: 22px;
       }
 
       .actions {
@@ -1122,7 +1796,16 @@
       }
 
       footer {
-        padding: 14px 18px;
+        padding: 14px 20px;
+      }
+
+      .social-links {
+        gap: 8px;
+      }
+
+      .social-link {
+        padding: 8px 14px;
+        font-size: 12px;
       }
     }
 
@@ -1140,7 +1823,7 @@
       }
 
       .profile-section {
-        gap: 14px;
+        gap: 16px;
       }
 
       .brand-text span {
@@ -1149,21 +1832,46 @@
 
       .datetime-bar {
         flex-direction: column;
-        gap: 4px;
+        gap: 6px;
         align-items: flex-start;
+      }
+
+      .quote-container {
+        padding: 14px 18px;
+      }
+
+      .bismillah-text {
+        font-size: 20px;
       }
     }
   </style>
 </head>
 
 <body>
+  <!-- Loading Screen -->
+  <div class="loader-screen" id="loaderScreen">
+    <div class="loader-spinner"></div>
+    <div class="loader-text">Loading</div>
+    <div class="loader-bar-track">
+      <div class="loader-bar-fill" id="loaderBarFill"></div>
+    </div>
+  </div>
+
+  <!-- Particle Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
   <!-- Animated background -->
   <div class="bg-orbs">
     <div class="orb"></div>
     <div class="orb"></div>
     <div class="orb"></div>
+    <div class="orb"></div>
   </div>
   <div class="bg-grid"></div>
+  <div class="noise-overlay"></div>
+
+  <!-- Scroll to Top -->
+  <button class="scroll-top-btn" id="scrollTopBtn" data-tooltip="Back to top">↑</button>
 
   <main class="card" role="main" id="mainCard">
     <!-- Top Navigation -->
@@ -1173,38 +1881,39 @@
         <div class="brand-text">Muzamil Wajid <span>/ Portfolio</span></div>
       </div>
       <div class="top-actions">
-        <button class="theme-btn" id="themeToggleBtn" title="Toggle Theme">🌙</button>
+        <button class="theme-btn" id="themeToggleBtn" title="Toggle Theme" data-tooltip="Toggle theme">🌙</button>
       </div>
     </div>
 
     <div class="card-inner">
       <!-- Bismillah -->
-      <div class="bismillah-container" title="Click to read Surah Al-Fatiha">
+      <div class="bismillah-container reveal" title="Click to read Surah Al-Fatiha">
         <p class="bismillah-text">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
       </div>
 
       <!-- Date/Time -->
-      <div class="datetime-bar">
+      <div class="datetime-bar reveal reveal-delay-1">
         <div class="dt-item"><span class="dt-icon">🕐</span> <span id="timeDisplay">--:--:--</span></div>
         <div class="dt-item"><span class="dt-icon">📅</span> <span id="dateDisplay">-- -- ----</span></div>
       </div>
 
       <!-- Profile Header -->
-      <div class="profile-section">
+      <div class="profile-section reveal reveal-delay-2">
         <div class="avatar-wrapper">
           <div class="avatar">
             <img id="profileImage" src="https://github.com/muzamilwajid/muzamil-bio/blob/main/dp%20image.jpeg?raw=true"
-              alt="Profile">
+              alt="Muzamil Wajid – Profile Photo">
           </div>
           <div class="status-dot"></div>
         </div>
         <div class="profile-info">
           <h1>Muzamil Wajid</h1>
-          <p class="tagline">Just a Name, Many Stories</p>
+          <p class="tagline">Just a Name, Many Stories <span class="typing-cursor"></span></p>
           <div class="profile-badges">
             <span class="badge accent">Developer</span>
+            <span class="badge green">🎯 Open to Work</span>
             <span class="badge">Lahore, PK</span>
-            <span class="badge">🎯 Open to Work</span>
+            <span class="badge pink">Odoo Dev</span>
           </div>
         </div>
       </div>
@@ -1212,43 +1921,146 @@
       <!-- Greeting -->
       <div class="greeting" id="greetingMessage"></div>
 
+      <!-- Quote -->
+      <div class="quote-container reveal reveal-delay-3" id="quoteContainer" data-tooltip="Click for a new quote">
+        <div class="quote-text" id="quoteText">Loading inspiration...</div>
+      </div>
+
+      <hr class="section-divider">
+
       <!-- Info Grid -->
+      <div class="section-title reveal reveal-delay-3">📋 Personal Info</div>
       <div class="info-grid">
-        <div class="info-card" data-item="name">
+        <div class="info-card reveal reveal-delay-3" data-item="name">
           <div class="card-icon">👤</div>
           <div class="label">Name</div>
           <div class="value">Muzamil Wajid</div>
         </div>
-        <div class="info-card" data-item="age">
+        <div class="info-card reveal reveal-delay-4" data-item="age">
           <div class="card-icon">🎂</div>
           <div class="label">Age</div>
           <div class="value" id="ageValue">— Years</div>
         </div>
-        <div class="info-card" data-item="role">
+        <div class="info-card reveal reveal-delay-5" data-item="role">
           <div class="card-icon">💻</div>
           <div class="label">Role</div>
           <div class="value">Website Developer</div>
         </div>
-        <div class="info-card" data-item="location">
+        <div class="info-card reveal reveal-delay-6" data-item="location">
           <div class="card-icon">📍</div>
           <div class="label">Location</div>
           <div class="value">Lahore, Allama Iqbal Town</div>
         </div>
       </div>
 
+      <hr class="section-divider">
+
+      <!-- Skills -->
+      <div class="section-title reveal">🛠️ Skills & Technologies</div>
+      <div class="skills-grid" id="skillsGrid">
+        <div class="skill-item reveal reveal-delay-1">
+          <div class="skill-header">
+            <span class="skill-name"><span class="skill-icon">🌐</span> HTML / CSS</span>
+            <span class="skill-pct">92%</span>
+          </div>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" data-width="92"></div>
+          </div>
+        </div>
+        <div class="skill-item reveal reveal-delay-2">
+          <div class="skill-header">
+            <span class="skill-name"><span class="skill-icon">⚡</span> JavaScript</span>
+            <span class="skill-pct">78%</span>
+          </div>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" data-width="78"></div>
+          </div>
+        </div>
+        <div class="skill-item reveal reveal-delay-3">
+          <div class="skill-header">
+            <span class="skill-name"><span class="skill-icon">🐍</span> Python / Odoo</span>
+            <span class="skill-pct">75%</span>
+          </div>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" data-width="75"></div>
+          </div>
+        </div>
+        <div class="skill-item reveal reveal-delay-4">
+          <div class="skill-header">
+            <span class="skill-name"><span class="skill-icon">📱</span> WordPress</span>
+            <span class="skill-pct">85%</span>
+          </div>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" data-width="85"></div>
+          </div>
+        </div>
+        <div class="skill-item reveal reveal-delay-5">
+          <div class="skill-header">
+            <span class="skill-name"><span class="skill-icon">🎨</span> UI/UX Design</span>
+            <span class="skill-pct">70%</span>
+          </div>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" data-width="70"></div>
+          </div>
+        </div>
+        <div class="skill-item reveal reveal-delay-6">
+          <div class="skill-header">
+            <span class="skill-name"><span class="skill-icon">🗄️</span> Git & GitHub</span>
+            <span class="skill-pct">80%</span>
+          </div>
+          <div class="skill-bar-track">
+            <div class="skill-bar-fill" data-width="80"></div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Social Links -->
+      <div class="section-title reveal">🔗 Connect With Me</div>
+      <div class="social-links reveal">
+        <a class="social-link tiktok" href="https://www.tiktok.com/@xuzi_mughal" target="_blank" rel="noopener">
+          <span class="social-icon">🎵</span> TikTok
+        </a>
+        <a class="social-link instagram" href="https://www.instagram.com/muzamil_wajid/" target="_blank" rel="noopener">
+          <span class="social-icon">📸</span> Instagram
+        </a>
+        <a class="social-link linkedin" href="https://www.linkedin.com/in/muzamil-wajid-52056b382/" target="_blank"
+          rel="noopener">
+          <span class="social-icon">💼</span> LinkedIn
+        </a>
+        <a class="social-link whatsapp" href="https://wa.me/923213505329" target="_blank" rel="noopener">
+          <span class="social-icon">💬</span> WhatsApp
+        </a>
+      </div>
+
+      <hr class="section-divider">
+
       <!-- Actions -->
-      <div class="actions">
+      <div class="section-title reveal">🎮 Mini Apps</div>
+      <div class="actions reveal">
         <button class="action-btn btn-rps" id="rpsOpenBtn">✊✋✌️ Play R•P•S</button>
         <button class="action-btn btn-calc" id="openCalc">🧮 Calculator</button>
       </div>
 
+      <!-- Visit Counter -->
+      <div class="visit-counter reveal">
+        <span class="counter-text">👁️ Page visits: <span class="counter-num" id="visitCount">0</span></span>
+      </div>
+
       <!-- Credit -->
-      <div class="credit"><strong>Crafted with care by Muzamil Wajid</strong></div>
+      <div class="credit reveal"><strong>Crafted with care by Muzamil Wajid</strong></div>
     </div>
 
     <footer>
       <div class="footer-inner">
         Copyright © 2025 Muzamil Wajid <span class="heart">♥</span>
+      </div>
+      <div class="footer-links">
+        <span class="footer-link" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to Top</span>
+        <span class="footer-link"
+          onclick="showModal('About','<p style=color:var(--text-primary)>A personal introductive site built with vanilla HTML, CSS & JavaScript. No frameworks, no libraries — pure craft.</p>','Version 2.0')">About
+          this Site</span>
       </div>
     </footer>
   </main>
@@ -1299,9 +2111,189 @@
     </div>
   </div>
 
-
   <script>
-    // ═══════════ Helpers: clock, greeting, modal ═══════════
+    /* ═══════════ Loading Screen ═══════════ */
+    (function () {
+      const loader = document.getElementById('loaderScreen');
+      const bar = document.getElementById('loaderBarFill');
+      const card = document.getElementById('mainCard');
+      let progress = 0;
+
+      const interval = setInterval(() => {
+        progress += Math.random() * 18 + 5;
+        if (progress > 100) progress = 100;
+        bar.style.width = progress + '%';
+        if (progress >= 100) {
+          clearInterval(interval);
+          setTimeout(() => {
+            loader.classList.add('hidden');
+            card.classList.add('loaded');
+          }, 350);
+        }
+      }, 120);
+    })();
+
+    /* ═══════════ Particle Canvas ═══════════ */
+    (function () {
+      const canvas = document.getElementById('particleCanvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let w, h;
+
+      function resize() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      function createParticles(count) {
+        particles = [];
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            r: Math.random() * 1.5 + 0.5,
+            alpha: Math.random() * 0.3 + 0.05
+          });
+        }
+      }
+      createParticles(60);
+
+      function animate() {
+        ctx.clearRect(0, 0, w, h);
+        const isLight = document.documentElement.classList.contains('light');
+        const color = isLight ? '17,19,25' : '240,242,245';
+
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = w;
+          if (p.x > w) p.x = 0;
+          if (p.y < 0) p.y = h;
+          if (p.y > h) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${color},${p.alpha})`;
+          ctx.fill();
+        });
+
+        // draw lines
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(${color},${0.04 * (1 - dist / 120)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(animate);
+      }
+      animate();
+    })();
+
+    /* ═══════════ Scroll Reveal ═══════════ */
+    (function () {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    })();
+
+    /* ═══════════ Scroll to Top Button ═══════════ */
+    (function () {
+      const btn = document.getElementById('scrollTopBtn');
+      window.addEventListener('scroll', () => {
+        btn.classList.toggle('show', window.scrollY > 300);
+      });
+      btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    })();
+
+    /* ═══════════ Visit Counter ═══════════ */
+    (function () {
+      const KEY = 'mw_visit_count';
+      let count = parseInt(localStorage.getItem(KEY) || '0', 10);
+      count++;
+      localStorage.setItem(KEY, count);
+      document.getElementById('visitCount').textContent = count;
+    })();
+
+    /* ═══════════ Quote Rotator ═══════════ */
+    (function () {
+      const quotes = [
+        { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+        { text: "Code is like humor. When you have to explain it, it's bad.", author: "Cory House" },
+        { text: "First, solve the problem. Then, write the code.", author: "John Johnson" },
+        { text: "Simplicity is the soul of efficiency.", author: "Austin Freeman" },
+        { text: "Talk is cheap. Show me the code.", author: "Linus Torvalds" },
+        { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler" },
+        { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+        { text: "In the middle of every difficulty lies opportunity.", author: "Albert Einstein" }
+      ];
+      let idx = Math.floor(Math.random() * quotes.length);
+      const el = document.getElementById('quoteText');
+      const container = document.getElementById('quoteContainer');
+
+      function showQuote() {
+        const q = quotes[idx];
+        el.innerHTML = `${q.text}<span class="quote-author">— ${q.author}</span>`;
+      }
+      showQuote();
+
+      container.addEventListener('click', () => {
+        el.style.opacity = '0';
+        setTimeout(() => {
+          idx = (idx + 1) % quotes.length;
+          showQuote();
+          el.style.opacity = '1';
+        }, 300);
+      });
+
+      setInterval(() => {
+        el.style.opacity = '0';
+        setTimeout(() => {
+          idx = (idx + 1) % quotes.length;
+          showQuote();
+          el.style.opacity = '1';
+        }, 400);
+      }, 8000);
+    })();
+
+    /* ═══════════ Skill Bars Animation ═══════════ */
+    (function () {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const fills = entry.target.querySelectorAll('.skill-bar-fill');
+            fills.forEach(fill => {
+              const w = fill.getAttribute('data-width');
+              setTimeout(() => { fill.style.width = w + '%'; }, 200);
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      const grid = document.getElementById('skillsGrid');
+      if (grid) observer.observe(grid);
+    })();
+
+    /* ═══════════ Helpers: clock, greeting ═══════════ */
     function pad(n) { return String(n).padStart(2, '0'); }
 
     function updateDateTime() {
@@ -1311,7 +2303,7 @@
       h = h % 12; h = h ? h : 12;
       document.getElementById('timeDisplay').textContent = `${pad(h)}:${m}:${s} ${ampm}`;
       const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      const months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       document.getElementById('dateDisplay').textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
     }
     setInterval(updateDateTime, 1000); updateDateTime();
@@ -1325,9 +2317,9 @@
       else msg = 'Good Night 🌙';
       document.getElementById('greetingMessage').textContent = msg;
     }
-    setInterval(updateGreeting, 1000); updateGreeting();
+    setInterval(updateGreeting, 60000); updateGreeting();
 
-    // ═══════════ Modal ═══════════
+    /* ═══════════ Modal ═══════════ */
     const modalBackdrop = document.getElementById('modalBackdrop');
 
     function showModal(title, bodyHtml, extra) {
@@ -1350,22 +2342,21 @@
     document.getElementById('closeModal').addEventListener('click', closeModal);
     modalBackdrop.addEventListener('click', (e) => { if (e.target === modalBackdrop) closeModal(); });
 
-    // ═══════════ Profile Image Modal ═══════════
+    /* ═══════════ Profile Image Modal ═══════════ */
     document.getElementById('profileImage').addEventListener('click', () => {
       const src = document.getElementById('profileImage').src;
-      const imgHtml = `<img src="${src}" alt="Profile">`;
-      showModal('Profile Picture', imgHtml, 'This is my profile picture.');
+      showModal('Profile Picture', `<img src="${src}" alt="Profile">`, 'This is my profile picture.');
     });
 
-    // ═══════════ Bismillah Modal ═══════════
+    /* ═══════════ Bismillah Modal ═══════════ */
     document.querySelector('.bismillah-container').addEventListener('click', () => {
       showModal('Surah Al-Fatiha',
-        `<p style="line-height:2;font-size:18px;color:var(--text-primary)">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ<br>الرَّحْمَٰنِ الرَّحِيمِ<br>مَالِكِ يَوْمِ الدِّينِ<br>إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ<br>اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ</p>`,
-        'Surah Al-Fatiha'
+        `<p style="line-height:2.2;font-size:20px;color:var(--text-primary)">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ<br>الرَّحْمَٰنِ الرَّحِيمِ<br>مَالِكِ يَوْمِ الدِّينِ<br>إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ<br>اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ</p>`,
+        'Surah Al-Fatiha — The Opening'
       );
     });
 
-    // ═══════════ Info Data ═══════════
+    /* ═══════════ Info Data ═══════════ */
     const data = {
       age: {
         label: 'Age',
@@ -1421,7 +2412,7 @@
     }
     setInterval(updateAgeDisplay, 3600 * 1000); updateAgeDisplay();
 
-    // ═══════════ Theme Toggle ═══════════
+    /* ═══════════ Theme Toggle ═══════════ */
     const themeBtn = document.getElementById('themeToggleBtn');
     if (localStorage.getItem('site_theme') === 'light') {
       document.documentElement.classList.add('light');
@@ -1431,18 +2422,13 @@
     }
 
     themeBtn.addEventListener('click', () => {
-      if (document.documentElement.classList.contains('light')) {
-        document.documentElement.classList.remove('light');
-        localStorage.setItem('site_theme', 'dark');
-        themeBtn.textContent = '🌙';
-      } else {
-        document.documentElement.classList.add('light');
-        localStorage.setItem('site_theme', 'light');
-        themeBtn.textContent = '☀️';
-      }
+      document.documentElement.classList.toggle('light');
+      const isLight = document.documentElement.classList.contains('light');
+      localStorage.setItem('site_theme', isLight ? 'light' : 'dark');
+      themeBtn.textContent = isLight ? '☀️' : '🌙';
     });
 
-    // ═══════════ Audio (WebAudio) ═══════════
+    /* ═══════════ Audio (WebAudio) ═══════════ */
     let audioCtx = null;
     function ensureAudio() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1466,59 +2452,39 @@
       } catch (e) { }
     }
 
-    function rightChoiceSound() {
-      playMelody([{ freq: 880, dur: 0.1 }, { freq: 990, dur: 0.12, offset: 0.1 }], 0.05);
-    }
-
-    function wrongChoiceSound() {
-      playMelody([{ freq: 220, dur: 0.12 }, { freq: 180, dur: 0.12, offset: 0.12 }], 0.05);
-    }
-
-    function drawChoiceSound() {
-      playMelody([{ freq: 520, dur: 0.12 }], 0.035);
-    }
+    function rightChoiceSound() { playMelody([{ freq: 880, dur: 0.1 }, { freq: 990, dur: 0.12, offset: 0.1 }], 0.05); }
+    function wrongChoiceSound() { playMelody([{ freq: 220, dur: 0.12 }, { freq: 180, dur: 0.12, offset: 0.12 }], 0.05); }
+    function drawChoiceSound() { playMelody([{ freq: 520, dur: 0.12 }], 0.035); }
 
     function winGameSound() {
       playMelody([
-        { freq: 440, dur: 0.25, offset: 0 },
-        { freq: 554, dur: 0.25, offset: 0.25 },
-        { freq: 659, dur: 0.25, offset: 0.5 },
-        { freq: 880, dur: 0.25, offset: 0.75 },
-        { freq: 988, dur: 0.25, offset: 1.0 },
-        { freq: 1047, dur: 0.3, offset: 1.25 }
+        { freq: 440, dur: 0.25, offset: 0 }, { freq: 554, dur: 0.25, offset: 0.25 },
+        { freq: 659, dur: 0.25, offset: 0.5 }, { freq: 880, dur: 0.25, offset: 0.75 },
+        { freq: 988, dur: 0.25, offset: 1.0 }, { freq: 1047, dur: 0.3, offset: 1.25 }
       ], 0.06);
     }
 
     function lostGameSound() {
       playMelody([
-        { freq: 330, dur: 0.4, offset: 0 },
-        { freq: 294, dur: 0.4, offset: 0.4 },
-        { freq: 262, dur: 0.5, offset: 0.8 },
-        { freq: 220, dur: 0.5, offset: 1.3 },
+        { freq: 330, dur: 0.4, offset: 0 }, { freq: 294, dur: 0.4, offset: 0.4 },
+        { freq: 262, dur: 0.5, offset: 0.8 }, { freq: 220, dur: 0.5, offset: 1.3 },
         { freq: 196, dur: 0.7, offset: 1.8 }
       ], 0.05);
     }
 
-    // ═══════════ Leaderboard ═══════════
+    /* ═══════════ Leaderboard ═══════════ */
     const LB_KEY = 'rps_lb_v1';
     const HS_KEY = 'rps_high_v1';
 
     function getLB() {
-      try {
-        return JSON.parse(localStorage.getItem(LB_KEY) || '{"wins":0,"losses":0,"draws":0,"matches":0}');
-      } catch (e) {
-        return { wins: 0, losses: 0, draws: 0, matches: 0 };
-      }
+      try { return JSON.parse(localStorage.getItem(LB_KEY) || '{"wins":0,"losses":0,"draws":0,"matches":0}'); }
+      catch (e) { return { wins: 0, losses: 0, draws: 0, matches: 0 }; }
     }
 
     function saveLB(o) { localStorage.setItem(LB_KEY, JSON.stringify(o)); }
+    function resetLB() { saveLB({ wins: 0, losses: 0, draws: 0, matches: 0 }); alert('Leaderboard reset'); }
 
-    function resetLB() {
-      saveLB({ wins: 0, losses: 0, draws: 0, matches: 0 });
-      alert('Leaderboard reset');
-    }
-
-    // ═══════════ RPS Game ═══════════
+    /* ═══════════ RPS Game ═══════════ */
     (function () {
       const openBtn = document.getElementById('rpsOpenBtn');
       openBtn.addEventListener('click', openRPSModal);
@@ -1528,62 +2494,62 @@
         const high = parseInt(localStorage.getItem(HS_KEY) || '0', 10);
 
         const html = `
-      <div id="rpsGame" style="max-width:640px;margin:0 auto;text-align:center">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap">
-          <div style="text-align:left">
-            <div style="font-size:13px;color:var(--text-secondary)">
-              Rounds:
-              <select id="rpsBestOf">
-                <option value="3" selected>3</option>
-                <option value="5">5</option>
-                <option value="7">7</option>
-                <option value="13">13</option>
-                <option value="19">19</option>
-                <option value="25">25</option>
-              </select>
-              Mode:
-              <select id="rpsMode">
-                <option value="easy">Easy</option>
-                <option value="normal" selected>Normal</option>
-                <option value="hard">Hard</option>
-              </select>
+        <div id="rpsGame" style="max-width:640px;margin:0 auto;text-align:center">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;flex-wrap:wrap">
+            <div style="text-align:left">
+              <div style="font-size:13px;color:var(--text-secondary)">
+                Rounds:
+                <select id="rpsBestOf">
+                  <option value="3" selected>3</option>
+                  <option value="5">5</option>
+                  <option value="7">7</option>
+                  <option value="13">13</option>
+                  <option value="19">19</option>
+                  <option value="25">25</option>
+                </select>
+                Mode:
+                <select id="rpsMode">
+                  <option value="easy">Easy</option>
+                  <option value="normal" selected>Normal</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:800;font-size:14px">High Wins: <span id="rpsHighWins">${high}</span></div>
+              <div style="font-size:12px;color:var(--text-tertiary)" id="rpsStreak">Streak: 0</div>
             </div>
           </div>
-          <div style="text-align:right">
-            <div style="font-weight:800;font-size:14px">High Wins: <span id="rpsHighWins">${high}</span></div>
-            <div style="font-size:12px;color:var(--text-tertiary)" id="rpsStreak">Streak: 0</div>
+
+          <div id="rpsArena">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px">
+              <div><div style="color:var(--text-tertiary);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">You</div><div id="rpsPlayerScore" style="font-weight:900;font-size:24px">0</div></div>
+              <div style="text-align:center"><div style="color:var(--text-tertiary);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Round</div><div id="rpsRound" style="font-weight:800;font-size:16px">0 / 3</div></div>
+              <div style="text-align:right"><div style="color:var(--text-tertiary);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Muzamil</div><div id="rpsCpuScore" style="font-weight:900;font-size:24px">0</div></div>
+            </div>
+
+            <div id="rpsMessage">Choose your move</div>
+
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
+              <button class="rpsMoveBtn" data-move="rock">✊ Rock</button>
+              <button class="rpsMoveBtn" data-move="paper">✋ Paper</button>
+              <button class="rpsMoveBtn" data-move="scissor">✌️ Scissor</button>
+            </div>
+
+            <div id="rpsHistory" style="max-height:140px;overflow-y:auto;margin-top:10px;text-align:left"></div>
+
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap">
+              <button id="rpsResetBtn" class="rps-reset-btn">🔄 New Match</button>
+            </div>
+
+            <div class="stat-row">
+              <div class="stat-pill">Matches: <span id="statMatches">${lb.matches}</span></div>
+              <div class="stat-pill">Wins: <span id="statWins">${lb.wins}</span></div>
+              <div class="stat-pill">Losses: <span id="statLosses">${lb.losses}</span></div>
+              <div class="stat-pill">Draws: <span id="statDraws">${lb.draws}</span></div>
+            </div>
           </div>
-        </div>
-
-        <div id="rpsArena">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:10px">
-            <div><div style="color:var(--text-tertiary);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">You</div><div id="rpsPlayerScore" style="font-weight:900;font-size:24px">0</div></div>
-            <div style="text-align:center"><div style="color:var(--text-tertiary);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Round</div><div id="rpsRound" style="font-weight:800;font-size:16px">0 / 3</div></div>
-            <div style="text-align:right"><div style="color:var(--text-tertiary);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px">Muzamil</div><div id="rpsCpuScore" style="font-weight:900;font-size:24px">0</div></div>
-          </div>
-
-          <div id="rpsMessage">Choose your move</div>
-
-          <div style="display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap">
-            <button class="rpsMoveBtn" data-move="rock">✊ Rock</button>
-            <button class="rpsMoveBtn" data-move="paper">✋ Paper</button>
-            <button class="rpsMoveBtn" data-move="scissor">✌️ Scissor</button>
-          </div>
-
-          <div id="rpsHistory" style="max-height:140px;overflow-y:auto;margin-top:10px;text-align:left"></div>
-
-          <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap">
-            <button id="rpsResetBtn" class="rps-reset-btn">🔄 New Match</button>
-          </div>
-
-          <div class="stat-row">
-            <div class="stat-pill">Matches: <span id="statMatches">${lb.matches}</span></div>
-            <div class="stat-pill">Wins: <span id="statWins">${lb.wins}</span></div>
-            <div class="stat-pill">Losses: <span id="statLosses">${lb.losses}</span></div>
-            <div class="stat-pill">Draws: <span id="statDraws">${lb.draws}</span></div>
-          </div>
-        </div>
-      </div>`;
+        </div>`;
 
         showModal('Rock • Paper • Scissor', html, 'Keyboard: 1=Rock, 2=Paper, 3=Scissor, R=Reset, Esc=Close');
         setTimeout(initRPS, 100);
@@ -1652,6 +2618,7 @@
         }
 
         function playRound(playerMove) {
+          if (moveBtns[0].disabled) return;
           const mode = modeEl.value; const cpu = cpuMove(mode, history);
           moveBtns.forEach(b => b.disabled = true);
           revealCpu(cpu, () => {
@@ -1673,11 +2640,10 @@
 
         function renderHist() {
           historyEl.innerHTML = history.map(h => {
-            let bg = 'var(--surface)';
             let borderC = 'var(--glass-border)';
-            if (h.result === 'win') { borderC = 'rgba(46,213,115,0.3)'; }
-            else if (h.result === 'lose') { borderC = 'rgba(255,71,87,0.3)'; }
-            return `<div style="padding:10px;border-radius:10px;background:${bg};border:1px solid ${borderC};margin-bottom:6px;font-size:14px">${emoji(h.p)} vs ${emoji(h.c)} — <strong>${h.result.toUpperCase()}</strong></div>`;
+            if (h.result === 'win') borderC = 'rgba(46,213,115,0.3)';
+            else if (h.result === 'lose') borderC = 'rgba(255,71,87,0.3)';
+            return `<div style="padding:10px;border-radius:10px;background:var(--surface);border:1px solid ${borderC};margin-bottom:6px;font-size:14px">${emoji(h.p)} vs ${emoji(h.c)} — <strong>${h.result.toUpperCase()}</strong></div>`;
           }).join('');
           const s = getLB();
           document.getElementById('statWins').textContent = s.wins;
@@ -1696,12 +2662,6 @@
         }
 
         resetBtn.addEventListener('click', resetMatch);
-
-        const showBoardBtn = document.getElementById('rpsShowBoardBtn');
-        if (showBoardBtn) {
-          showBoardBtn.addEventListener('click', () => { alert(JSON.stringify(getLB(), null, 2)); });
-        }
-
         moveBtns.forEach(b => b.addEventListener('click', () => playRound(b.dataset.move)));
 
         if (window.__rpsKeyHandler) document.removeEventListener('keydown', window.__rpsKeyHandler);
@@ -1710,11 +2670,7 @@
           if (e.key === '2') playRound('paper');
           if (e.key === '3') playRound('scissor');
           if (e.key.toLowerCase() === 'r') resetMatch();
-          if (e.key === 'Escape') {
-            document.removeEventListener('keydown', window.__rpsKeyHandler);
-            window.__rpsKeyHandler = null;
-            closeModal();
-          }
+          if (e.key === 'Escape') { document.removeEventListener('keydown', window.__rpsKeyHandler); window.__rpsKeyHandler = null; closeModal(); }
         };
         document.addEventListener('keydown', window.__rpsKeyHandler);
       }
@@ -1722,7 +2678,7 @@
 
     window.__resetLB = function () { resetLB(); };
 
-    // ═══════════ Calculator ═══════════
+    /* ═══════════ Calculator ═══════════ */
     const openCalcBtn = document.getElementById("openCalc");
     const calc = document.getElementById("calc");
     const closeCalcBtn = document.getElementById("closeCalc");
@@ -1740,27 +2696,13 @@
     calcButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         const val = btn.textContent;
-        if (val === "C") {
-          currentInput = "";
-          displayEl.textContent = "0";
-        } else if (val === "=") {
-          try {
-            currentInput = eval(currentInput).toString();
-            displayEl.textContent = currentInput;
-          } catch {
-            displayEl.textContent = "Error";
-          }
+        if (val === "C") { currentInput = ""; displayEl.textContent = "0"; }
+        else if (val === "=") {
+          try { currentInput = eval(currentInput).toString(); displayEl.textContent = currentInput; }
+          catch { displayEl.textContent = "Error"; }
         } else if (val === "+/-") {
-          if (currentInput) {
-            currentInput = currentInput.startsWith("-")
-              ? currentInput.slice(1)
-              : "-" + currentInput;
-            displayEl.textContent = currentInput;
-          }
-        } else {
-          currentInput += val;
-          displayEl.textContent = currentInput;
-        }
+          if (currentInput) { currentInput = currentInput.startsWith("-") ? currentInput.slice(1) : "-" + currentInput; displayEl.textContent = currentInput; }
+        } else { currentInput += val; displayEl.textContent = currentInput; }
       });
     });
 
@@ -1771,7 +2713,7 @@
       calcLabel.textContent = darkMode ? "Dark" : "Light";
     });
 
-    // ═══════════ Birthday Check ═══════════
+    /* ═══════════ Birthday Check ═══════════ */
     document.addEventListener('DOMContentLoaded', () => {
       const now = new Date();
       const showBirthday = (now.getMonth() === 8 && now.getDate() === 12);
@@ -1795,6 +2737,13 @@
             </p>`
           );
         }
+      }
+    });
+
+    /* ═══════════ Keyboard shortcut: Escape to close calc ═══════════ */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && calc.classList.contains('show')) {
+        calc.classList.remove('show');
       }
     });
   </script>
