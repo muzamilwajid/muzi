@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Emoo 💖</title>
+    <title>Wishes</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600;700&family=Great+Vibes&display=swap');
 
@@ -58,16 +58,6 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            pointer-events: none
-        }
-
-        canvas#fxC {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
             pointer-events: none
         }
 
@@ -766,7 +756,6 @@
             box-shadow: var(--gpink)
         }
 
-        /* ===== FAST FLOATING ELEMENTS ===== */
         .floating-h {
             position: fixed;
             opacity: 0;
@@ -927,23 +916,6 @@
             }
         }
 
-        @keyframes sparkAnim {
-            0% {
-                opacity: 0;
-                transform: scale(0) translateY(0)
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1) translateY(-10px)
-            }
-
-            100% {
-                opacity: 0;
-                transform: scale(0) translateY(-20px)
-            }
-        }
-
         @media(max-width:768px) {
             .tl::before {
                 left: 20px
@@ -993,7 +965,6 @@
 
 <body>
     <canvas id="bgC"></canvas>
-    <canvas id="fxC"></canvas>
 
     <div id="loader">
         <div class="lh">💖</div>
@@ -1246,7 +1217,7 @@
         function playMelody() {
             if (!musicPlaying) return;
             let time = 0;
-            melody.forEach((n, i) => {
+            melody.forEach((n) => {
                 if (n.f > 0) {
                     setTimeout(() => {
                         if (!musicPlaying) return;
@@ -1265,11 +1236,10 @@
             clickSound();
         }
 
-        // ========== BACKGROUND CANVAS ==========
+        // ========== BACKGROUND CANVAS (stars only) ==========
         const bgC = document.getElementById('bgC'), bgCtx = bgC.getContext('2d');
-        const fxC = document.getElementById('fxC'), fxCtx = fxC.getContext('2d');
         let W, H;
-        function resize() { W = bgC.width = fxC.width = window.innerWidth; H = bgC.height = fxC.height = window.innerHeight }
+        function resize() { W = bgC.width = window.innerWidth; H = bgC.height = window.innerHeight }
         resize(); window.addEventListener('resize', resize);
 
         class Star {
@@ -1279,102 +1249,16 @@
             draw(c) { c.beginPath(); c.arc(this.x, this.y, this.s, 0, Math.PI * 2); c.fillStyle = `rgba(255,255,255,${this.a})`; c.fill() }
         }
 
-        // ===== FAST CANVAS HEARTS & FLOWERS =====
-        const floatEmojis = ['💖', '💗', '💕', '❤️', '💝', '🌸', '🌺', '🌹', '🌷', '✨', '💐', '🦋', '🌼', '💮', '🏵️'];
-
-        class FloatHeart {
-            constructor(startRandom) {
-                this.reset(startRandom);
-            }
-            reset(startRandom) {
-                this.x = Math.random() * W;
-                this.y = startRandom ? Math.random() * H : H + 30 + Math.random() * 60;
-                this.s = Math.random() * 18 + 14;
-                this.sp = Math.random() * 3.5 + 2.0;   // <<<< MUCH FASTER (was 0.5+0.3)
-                this.a = Math.random() * .5 + .25;
-                this.wx = Math.random() * 3 - 1.5;
-                this.wf = Math.random() * .03 + .015;   // wave frequency
-                this.rot = Math.random() * Math.PI * 2;
-                this.rs = (Math.random() - .5) * .04;
-                this.emoji = floatEmojis[Math.floor(Math.random() * floatEmojis.length)];
-                this.phase = Math.random() * Math.PI * 2;
-                this.time = 0;
-            }
-            update() {
-                this.time++;
-                this.y -= this.sp;
-                this.x += Math.sin(this.time * this.wf + this.phase) * this.wx;
-                this.rot += this.rs;
-                // Fade near edges
-                if (this.y < H * 0.1) this.a = Math.max(0, this.a - 0.008);
-                if (this.y < -40) this.reset(false);
-            }
-            draw(c) {
-                c.save();
-                c.translate(this.x, this.y);
-                c.rotate(this.rot);
-                c.globalAlpha = this.a;
-                c.font = this.s + 'px serif';
-                c.textAlign = 'center';
-                c.textBaseline = 'middle';
-                c.fillText(this.emoji, 0, 0);
-                c.restore();
-                c.globalAlpha = 1;
-            }
-        }
-
-        let stars = [], canvasHearts = [];
+        let stars = [];
         for (let i = 0; i < 150; i++) stars.push(new Star());
-        for (let i = 0; i < 35; i++) canvasHearts.push(new FloatHeart(true));  // More hearts (was 15)
 
         function drawBg() {
             bgCtx.fillStyle = 'rgba(5,5,16,.18)';
             bgCtx.fillRect(0, 0, W, H);
             stars.forEach(s => { s.update(); s.draw(bgCtx) });
-            canvasHearts.forEach(h => { h.update(); h.draw(bgCtx) });
             requestAnimationFrame(drawBg);
         }
         drawBg();
-
-        // ========== EFFECTS CANVAS ==========
-        let particles = [];
-        class Particle {
-            constructor(x, y, c, type = 'circle') {
-                this.x = x; this.y = y; this.c = c; this.type = type;
-                this.vx = (Math.random() - .5) * 12; this.vy = (Math.random() - .5) * 12 - 3;
-                this.life = 1; this.decay = Math.random() * .015 + .008; this.s = Math.random() * 6 + 2; this.g = .1; this.rot = Math.random() * Math.PI * 2; this.rs = Math.random() * .1 - .05
-            }
-            update() { this.x += this.vx; this.y += this.vy; this.vy += this.g; this.life -= this.decay; this.rot += this.rs; return this.life > 0 }
-            draw(c) {
-                c.save(); c.translate(this.x, this.y); c.rotate(this.rot); c.globalAlpha = this.life;
-                if (this.type === 'heart') { c.font = this.s * 3 + 'px serif'; c.fillText('❤️', -this.s, -this.s) }
-                else if (this.type === 'conf') { c.fillStyle = this.c; c.fillRect(-this.s / 2, -this.s, this.s, this.s * 2) }
-                else { c.beginPath(); c.arc(0, 0, this.s, 0, Math.PI * 2); c.fillStyle = this.c; c.fill() }
-                c.restore(); c.globalAlpha = 1
-            }
-        }
-
-        function heartExplosion(x, y) {
-            let cols = ['#ff6b9d', '#ff1744', '#e91e63', '#f06292', '#ff80ab', '#ffd700', '#b19cd9'];
-            for (let i = 0; i < 60; i++)particles.push(new Particle(x, y, cols[Math.floor(Math.random() * cols.length)], 'heart'));
-            for (let i = 0; i < 80; i++)particles.push(new Particle(x, y, cols[Math.floor(Math.random() * cols.length)]));
-        }
-
-        function confettiExplode() {
-            let cols = ['#ff6b9d', '#ffd700', '#b19cd9', '#4ade80', '#60a5fa', '#f97316', '#f43f5e', '#a78bfa'];
-            for (let i = 0; i < 150; i++) {
-                let p = new Particle(Math.random() * W, -20, cols[Math.floor(Math.random() * cols.length)], 'conf');
-                p.vx = (Math.random() - .5) * 8; p.vy = Math.random() * 4 + 2; p.g = .05; p.decay = Math.random() * .005 + .003;
-                particles.push(p);
-            }
-        }
-
-        function drawFx() {
-            fxCtx.clearRect(0, 0, W, H);
-            particles = particles.filter(p => { let alive = p.update(); p.draw(fxCtx); return alive });
-            requestAnimationFrame(drawFx);
-        }
-        drawFx();
 
         // ========== LOADING ==========
         let loadProg = 0;
@@ -1407,18 +1291,14 @@
             let btn = document.getElementById('mainBtn');
             btn.style.transform = 'scale(1.2)';
             setTimeout(() => {
-                heartExplosion(W / 2, H / 2);
                 successSound();
-                confettiExplode();
-                setTimeout(() => confettiExplode(), 300);
-                setTimeout(() => confettiExplode(), 600);
                 setTimeout(() => {
                     document.getElementById('welcome').classList.add('hide');
                     document.getElementById('main').classList.add('vis');
                     document.getElementById('main').style.display = 'block';
                     setTimeout(initScrollAnim, 300);
                     spawnFloatingHearts();
-                }, 1500);
+                }, 1000);
             }, 200);
         }
 
@@ -1434,12 +1314,11 @@
                 h.style.bottom = '-30px';
                 let size = Math.random() * 18 + 16;
                 h.style.fontSize = size + 'px';
-                // FAST duration: 1.5s to 3.5s (was 4-8s before)
                 let dur = (Math.random() * 2 + 1.5);
                 h.style.setProperty('--dur', dur + 's');
                 document.body.appendChild(h);
                 setTimeout(() => h.remove(), (dur + 0.5) * 1000);
-            }, 250);  // Spawn every 250ms (was 800ms — much more frequent now)
+            }, 250);
         }
 
         // ========== MODALS ==========
@@ -1448,7 +1327,7 @@
             let m;
             switch (id) {
                 case 'eid': m = document.getElementById('eidM'); break;
-                case 'bday': m = document.getElementById('bdayM'); heartExplosion(W / 2, H / 2); confettiExplode(); break;
+                case 'bday': m = document.getElementById('bdayM'); break;
                 case 'forg': m = document.getElementById('forgM'); break;
                 case 'mem': m = document.getElementById('memM'); break;
                 case 'game': m = document.getElementById('gameM'); break;
@@ -1456,7 +1335,6 @@
             }
             if (m) m.classList.add('act');
             setTimeout(() => successSound(), 200);
-            if (id === 'eid') setTimeout(() => confettiExplode(), 400);
         }
         function closeModal(id) {
             clickSound();
@@ -1540,14 +1418,12 @@ With all my love 💖`;
                     heartCatchSound();
                     document.getElementById('gScore').textContent = gameScore;
                     if (gameScore <= 10) document.getElementById('gMsg').textContent = gameMsgs[gameScore - 1];
-                    heartExplosion(e.clientX, e.clientY);
                     h.style.transform = 'scale(2)'; h.style.opacity = '0';
                     setTimeout(() => { if (h.parentNode) h.remove() }, 200);
                     clearInterval(fall);
                     if (gameScore >= 10) {
                         stopGame();
                         document.getElementById('gMsg').innerHTML = '<span style="color:var(--acc);font-family:Dancing Script,cursive;font-size:22px">🎉 You Won! You caught all my love! I love you Emoo! 💖✨</span>';
-                        confettiExplode(); setTimeout(() => confettiExplode(), 500);
                         successSound();
                     }
                 };
@@ -1601,17 +1477,6 @@ With all my love 💖`;
             }, { threshold: .15, rootMargin: '0px 0px -50px 0px' });
             document.querySelectorAll('.ri,.ti').forEach(el => obs.observe(el));
         }
-
-        // ========== SPARKLE ON MOVE ==========
-        let sparkleThrottle = 0;
-        document.addEventListener('mousemove', (e) => {
-            if (Date.now() - sparkleThrottle < 80) return;
-            sparkleThrottle = Date.now();
-            let s = document.createElement('div');
-            s.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;width:5px;height:5px;background:var(--acc);border-radius:50%;pointer-events:none;z-index:9998;opacity:0;animation:sparkAnim .5s ease forwards`;
-            document.body.appendChild(s);
-            setTimeout(() => s.remove(), 500);
-        });
 
         // ========== CLOSE MODALS ON OUTSIDE CLICK ==========
         document.querySelectorAll('.modal').forEach(m => {
