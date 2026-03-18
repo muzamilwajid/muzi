@@ -2391,24 +2391,56 @@
 
             function addP() {
                 const g = pipeGap(), minH = 50, maxH = gH - g - minH - 30;
-                const tH = Math.random() * (maxH - minH) + minH; pipes.push({ x: gW, topH: tH, scored: false })
+                const tH = Math.random() * (maxH - minH) + minH;
+                pipes.push({ x: gW, topH: tH, scored: false });
             }
 
             function updateG() {
                 if (!gRun || gOvr) return;
-                bird.vy += grav; bird.y += bird.vy; bird.rot = Math.min(bird.vy * 3, 90); gFrm++;
-                const rate = Math.max(50, 80 - gScore * 2); if (gFrm % rate === 0) addP();
-                const spd = pSpd + gScore * .07; const g = pipeGap();
+                bird.vy += grav; bird.y += bird.vy;
+                bird.rot = Math.min(bird.vy * 3, 90); gFrm++;
+
+                const spd = pSpd + gScore * .07;
+                const g = pipeGap();
+
+                /* ── Pipe Spawning with guaranteed minimum distance ── */
+                const minPipeDist = Math.max(gW * 0.32, 220);   // never closer than this
+                const rate = Math.max(55, 85 - gScore * 2);
+
+                if (gFrm % rate === 0) {
+                    const last = pipes[pipes.length - 1];
+                    // Only spawn if there are no pipes or the last pipe is far enough
+                    if (!last || (gW - last.x) >= minPipeDist) {
+                        addP();
+                    }
+                }
+
+                // Fallback: if no pipe was added and last pipe is already far enough, force one
+                if (pipes.length > 0) {
+                    const last = pipes[pipes.length - 1];
+                    if (gW - last.x >= minPipeDist + 60) addP();   // catch-up spawn
+                } else if (gFrm > 60) {
+                    addP();  // ensure first pipe eventually appears
+                }
+
+                /* ── Move & collide pipes ── */
                 for (let i = pipes.length - 1; i >= 0; i--) {
                     const p = pipes[i]; p.x -= spd;
                     if (!p.scored && p.x + pW < bird.x) {
                         p.scored = true; gScore++; gSD.textContent = gScore;
-                        if (gScore > gBest) { gBest = gScore; gBD.textContent = gBest; localStorage.setItem('flappyBest', gBest) }
+                        if (gScore > gBest) {
+                            gBest = gScore; gBD.textContent = gBest;
+                            localStorage.setItem('flappyBest', gBest);
+                        }
                     }
                     if (p.x + pW < 0) pipes.splice(i, 1);
-                    if (bird.x + bird.r > p.x && bird.x - bird.r < p.x + pW) { if (bird.y - bird.r < p.topH || bird.y + bird.r > p.topH + g) gOvr = true }
+                    if (bird.x + bird.r > p.x && bird.x - bird.r < p.x + pW) {
+                        if (bird.y - bird.r < p.topH || bird.y + bird.r > p.topH + g)
+                            gOvr = true;
+                    }
                 }
-                if (bird.y + bird.r > gH - 25 || bird.y - bird.r < 0) gOvr = true
+
+                if (bird.y + bird.r > gH - 25 || bird.y - bird.r < 0) gOvr = true;
             }
 
             function drawG() {
