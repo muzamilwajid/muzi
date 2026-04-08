@@ -538,58 +538,6 @@
             transform: scale(.9)
         }
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            opacity: 0;
-            animation: fadeInUp .8s 1.5s forwards
-        }
-
-        .mouse {
-            width: 26px;
-            height: 40px;
-            border: 2px solid var(--text3);
-            border-radius: 13px;
-            position: relative
-        }
-
-        .wheel {
-            width: 4px;
-            height: 8px;
-            background: var(--accent);
-            border-radius: 2px;
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: scroll-wheel 2s infinite
-        }
-
-        .scroll-indicator span {
-            font-size: 11px;
-            color: var(--text3);
-            letter-spacing: 2px;
-            text-transform: uppercase
-        }
-
-        @keyframes scroll-wheel {
-            0% {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0)
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateX(-50%) translateY(12px)
-            }
-        }
-
         .section {
             padding: 80px 0;
             position: relative;
@@ -1044,169 +992,6 @@
             margin-top: 4px
         }
 
-        /* ===== GAME SECTION — TRUE FULLSCREEN ===== */
-        .game-section {
-            background: var(--bg2);
-            position: relative;
-            z-index: 1;
-            padding: 0;
-            margin: 0;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .game-header-area {
-            padding: 24px 20px 12px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .game-header-area .section-title {
-            margin-bottom: 6px
-        }
-
-        .game-header-area .section-subtitle {
-            margin-bottom: 10px;
-            font-size: 14px
-        }
-
-        .game-body {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            position: relative;
-            min-height: 0;
-        }
-
-        .game-canvas-wrap {
-            flex: 1;
-            width: 100%;
-            position: relative;
-            background: var(--bg1);
-            display: flex;
-            align-items: stretch;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        #gameCanvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-            touch-action: none;
-        }
-
-        .game-controls-bar {
-            flex-shrink: 0;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            padding: 14px 20px 24px;
-            background: var(--bg2);
-        }
-
-        .game-score-box {
-            padding: 10px 22px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            font-size: 15px;
-            color: var(--text2);
-            font-weight: 500
-        }
-
-        .game-score-box span {
-            font-weight: 700;
-            color: var(--accent);
-            font-size: 17px
-        }
-
-        /* Fullscreen game overlay */
-        .game-fs-active {
-            position: fixed !important;
-            inset: 0 !important;
-            z-index: 10000 !important;
-            min-height: 100vh !important;
-            height: 100vh !important;
-        }
-
-        .game-fs-active .game-header-area {
-            display: none
-        }
-
-        .game-fs-active .game-canvas-wrap {
-            flex: 1
-        }
-
-        .game-fs-active .game-controls-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 2;
-            background: linear-gradient(transparent, rgba(0, 0, 0, .75));
-            padding: 20px 20px 30px;
-        }
-
-        .game-fs-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 20px;
-            background: var(--gradient);
-            color: #fff;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-            border: none;
-        }
-
-        .game-exit-btn {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            z-index: 10001;
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: rgba(0, 0, 0, .6);
-            border: 1px solid rgba(255, 255, 255, .15);
-            color: #fff;
-            font-size: 22px;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .game-fs-active .game-exit-btn {
-            display: flex !important
-        }
-
-        @media(min-width:768px) {
-            .game-section {
-                min-height: 100vh
-            }
-
-            .game-canvas-wrap {
-                border-top: 2px solid var(--glass-border);
-                border-bottom: 2px solid var(--glass-border)
-            }
-        }
-
-        @media(min-width:1200px) {
-            .game-section {
-                min-height: 100vh
-            }
-        }
 
         .contact-content {
             display: flex;
@@ -1701,7 +1486,7 @@
 
         @media(min-width:768px) {
             .section {
-                padding: 100px 0
+                padding: 50px 0
             }
 
             .projects-grid {
@@ -1806,7 +1591,6 @@
                 <a href="#skills" class="nav-link">Skills</a>
                 <a href="#projects" class="nav-link">Projects</a>
                 <a href="#services" class="nav-link">Services</a>
-                <a href="#game" class="nav-link">Game 🎮</a>
                 <a href="#contact" class="nav-link">Contact</a>
             </div>
             <div class="nav-actions">
@@ -1841,11 +1625,6 @@
                         class="fab fa-linkedin-in"></i></a>
                 <a href="mailto:muzammil.ibees@gmail.com" class="social-icon"><i class="fas fa-envelope"></i></a>
             </div>
-        </div>
-        <div class="scroll-indicator">
-            <div class="mouse">
-                <div class="wheel"></div>
-            </div><span>Scroll Down</span>
         </div>
     </section>
 
@@ -2054,28 +1833,6 @@
         </div>
     </section>
 
-    <!-- ===== FULL SCREEN GAME SECTION ===== -->
-    <section id="game" class="game-section">
-        <div class="game-header-area">
-            <h2 class="section-title reveal">Mini Game 🎮</h2>
-            <p class="section-subtitle reveal">Take a break! Tap or Press Space to play Flappy Bird</p>
-        </div>
-        <div class="game-body">
-            <div class="game-canvas-wrap" id="gameWrap">
-                <canvas id="gameCanvas"></canvas>
-                <button class="game-exit-btn" id="gameExitBtn" aria-label="Exit Fullscreen"><i
-                        class="fas fa-compress"></i></button>
-            </div>
-            <div class="game-controls-bar">
-                <div class="game-score-box">Score: <span id="gameScoreDisplay">0</span></div>
-                <div class="game-score-box">Best: <span id="gameBestDisplay">0</span></div>
-                <button class="btn btn-outline" id="gameRestart" style="padding:10px 22px;font-size:14px"><i
-                        class="fas fa-redo"></i> Restart</button>
-                <button class="game-fs-btn" id="gameFsBtn"><i class="fas fa-expand"></i> Fullscreen</button>
-            </div>
-        </div>
-    </section>
-
     <section id="contact" class="section">
         <div class="container">
             <h2 class="section-title reveal">Get In Touch</h2>
@@ -2137,8 +1894,7 @@
                 <a href="https://www.linkedin.com/in/muzamil-wajid-52056b382/" target="_blank" class="social-icon"><i
                         class="fab fa-linkedin-in"></i></a>
             </div>
-            <p class="footer-text">© 2025 <a href="#hero">Muzamil Wajid</a>. Made with <span
-                    class="footer-heart">❤️</span> in Lahore</p>
+            <p class="footer-text">© 2026 <a href="#hero">Muzamil Wajid</a> in Pakistan</p>
         </div>
     </footer>
 
@@ -2237,14 +1993,6 @@
             const cObs = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { const el = e.target, t = parseInt(el.dataset.target); let c = 0; const s = t / 1500 * 16; const tm = setInterval(() => { c += s; if (c >= t) { el.textContent = t; clearInterval(tm) } else el.textContent = Math.floor(c) }, 16); cObs.unobserve(el) } }) }, { threshold: .5 });
             ctrs.forEach(c => cObs.observe(c));
 
-            /* TILT */
-            document.querySelectorAll('.tilt-card').forEach(card => {
-                card.addEventListener('mousemove', e => { const r = card.getBoundingClientRect(); card.style.transform = `perspective(1000px) rotateX(${(e.clientY - r.top - r.height / 2) / 15}deg) rotateY(${(r.width / 2 - (e.clientX - r.left)) / 15}deg) scale3d(1.02,1.02,1.02)` });
-                card.addEventListener('mouseleave', () => card.style.transform = '');
-                card.addEventListener('touchmove', e => { e.preventDefault(); const t = e.touches[0], r = card.getBoundingClientRect(); card.style.transform = `perspective(1000px) rotateX(${(t.clientY - r.top - r.height / 2) / 20}deg) rotateY(${(r.width / 2 - (t.clientX - r.left)) / 20}deg) scale3d(1.02,1.02,1.02)` }, { passive: false });
-                card.addEventListener('touchend', () => card.style.transform = '')
-            });
-
             /* CURSOR */
             const cDt = document.getElementById('cursorDot'), cOt = document.getElementById('cursorOutline');
             if (window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
@@ -2315,246 +2063,6 @@
             /* SMOOTH SCROLL */
             document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', e => { const t = document.querySelector(a.getAttribute('href')); if (t) { e.preventDefault(); window.scrollTo({ top: t.getBoundingClientRect().top + window.pageYOffset - 70, behavior: 'smooth' }) } }) });
 
-            /* ============================================================ */
-            /* ===== FLAPPY BIRD — TRUE FULLSCREEN GAME =================== */
-            /* ============================================================ */
-            const gCanvas = document.getElementById('gameCanvas'), gCtx = gCanvas.getContext('2d');
-            const gSD = document.getElementById('gameScoreDisplay'), gBD = document.getElementById('gameBestDisplay');
-            const gRst = document.getElementById('gameRestart'), gSec = document.getElementById('game');
-            const gFsBtn = document.getElementById('gameFsBtn'), gExBtn = document.getElementById('gameExitBtn');
-            const waF = document.getElementById('waFloat');
-
-            let gW, gH, isGFS = false;
-
-            function resizeG() {
-                const wrap = document.getElementById('gameWrap');
-                if (isGFS) {
-                    gW = window.innerWidth;
-                    gH = window.innerHeight;
-                } else {
-                    gW = wrap.clientWidth || window.innerWidth;
-                    gH = wrap.clientHeight || window.innerHeight - 150;
-                }
-                gCanvas.width = gW;
-                gCanvas.height = gH;
-            }
-            resizeG();
-            window.addEventListener('resize', resizeG);
-
-            function toggleFS() {
-                if (!isGFS) {
-                    isGFS = true;
-                    gSec.classList.add('game-fs-active');
-                    document.body.style.overflow = 'hidden';
-                    navbar.style.display = 'none';
-                    scrollP.style.display = 'none';
-                    waF.style.display = 'none';
-                    btt.style.display = 'none';
-                } else {
-                    isGFS = false;
-                    gSec.classList.remove('game-fs-active');
-                    document.body.style.overflow = '';
-                    navbar.style.display = '';
-                    scrollP.style.display = '';
-                    waF.style.display = '';
-                    btt.style.display = '';
-                }
-                resizeG(); initG();
-            }
-
-            gFsBtn.addEventListener('click', toggleFS);
-            gExBtn.addEventListener('click', toggleFS);
-
-            const bird = { x: 0, y: 0, vy: 0, r: 15, rot: 0 };
-            let pipes = [], gScore = 0, gBest = parseInt(localStorage.getItem('flappyBest')) || 0;
-            let gRun = false, gOvr = false, gFrm = 0, gStars = [];
-            const grav = .38, jmpF = -7;
-            const pW = 50, pSpd = 2.5;
-
-            function pipeGap() { return Math.max(115, Math.min(gH * 0.24, 155)) }
-
-            function initG() {
-                bird.x = gW * .18; bird.y = gH / 2; bird.vy = 0; bird.rot = 0;
-                pipes = []; gScore = 0; gOvr = false; gRun = false; gFrm = 0;
-                gSD.textContent = 0; gBD.textContent = gBest;
-                gStars = []; for (let i = 0; i < 40; i++)gStars.push({ x: Math.random() * gW, y: Math.random() * gH, s: Math.random() * 1.5 + .5, o: Math.random() * .5 + .2 });
-                drawG();
-            }
-            initG();
-
-            function jump() { if (gOvr) { initG(); return } if (!gRun) gRun = true; bird.vy = jmpF }
-
-            gCanvas.addEventListener('click', e => { e.preventDefault(); jump() });
-            gCanvas.addEventListener('touchstart', e => { e.preventDefault(); jump() }, { passive: false });
-            document.addEventListener('keydown', e => { if (e.code === 'Space') { const r = gCanvas.getBoundingClientRect(); if (r.top < window.innerHeight && r.bottom > 0) { e.preventDefault(); jump() } } });
-            gRst.addEventListener('click', initG);
-
-            function addP() {
-                const g = pipeGap(), minH = 50, maxH = gH - g - minH - 30;
-                const tH = Math.random() * (maxH - minH) + minH;
-                pipes.push({ x: gW, topH: tH, scored: false });
-            }
-
-            function updateG() {
-                if (!gRun || gOvr) return;
-                bird.vy += grav; bird.y += bird.vy;
-                bird.rot = Math.min(bird.vy * 3, 90); gFrm++;
-
-                const spd = pSpd + gScore * .07;
-                const g = pipeGap();
-
-                /* ── Pipe Spawning with guaranteed minimum distance ── */
-                const minPipeDist = Math.max(gW * 0.32, 220);   // never closer than this
-                const rate = Math.max(55, 85 - gScore * 2);
-
-                if (gFrm % rate === 0) {
-                    const last = pipes[pipes.length - 1];
-                    // Only spawn if there are no pipes or the last pipe is far enough
-                    if (!last || (gW - last.x) >= minPipeDist) {
-                        addP();
-                    }
-                }
-
-                // Fallback: if no pipe was added and last pipe is already far enough, force one
-                if (pipes.length > 0) {
-                    const last = pipes[pipes.length - 1];
-                    if (gW - last.x >= minPipeDist + 60) addP();   // catch-up spawn
-                } else if (gFrm > 60) {
-                    addP();  // ensure first pipe eventually appears
-                }
-
-                /* ── Move & collide pipes ── */
-                for (let i = pipes.length - 1; i >= 0; i--) {
-                    const p = pipes[i]; p.x -= spd;
-                    if (!p.scored && p.x + pW < bird.x) {
-                        p.scored = true; gScore++; gSD.textContent = gScore;
-                        if (gScore > gBest) {
-                            gBest = gScore; gBD.textContent = gBest;
-                            localStorage.setItem('flappyBest', gBest);
-                        }
-                    }
-                    if (p.x + pW < 0) pipes.splice(i, 1);
-                    if (bird.x + bird.r > p.x && bird.x - bird.r < p.x + pW) {
-                        if (bird.y - bird.r < p.topH || bird.y + bird.r > p.topH + g)
-                            gOvr = true;
-                    }
-                }
-
-                if (bird.y + bird.r > gH - 25 || bird.y - bird.r < 0) gOvr = true;
-            }
-
-            function drawG() {
-                const dk = html.getAttribute('data-theme') === 'dark';
-                const sg = gCtx.createLinearGradient(0, 0, 0, gH);
-                if (dk) { sg.addColorStop(0, '#070720'); sg.addColorStop(.5, '#0d0d35'); sg.addColorStop(1, '#151550') }
-                else { sg.addColorStop(0, '#4FC3F7'); sg.addColorStop(.5, '#81D4FA'); sg.addColorStop(1, '#B3E5FC') }
-                gCtx.fillStyle = sg; gCtx.fillRect(0, 0, gW, gH);
-
-                /* Stars / Clouds */
-                if (dk) { gStars.forEach(s => { gCtx.beginPath(); gCtx.arc(s.x, s.y, s.s, 0, Math.PI * 2); gCtx.fillStyle = `rgba(255,255,255,${s.o})`; gCtx.fill() }) }
-                else {
-                    gCtx.fillStyle = 'rgba(255,255,255,.6)';
-                    for (let i = 0; i < 5; i++) {
-                        const cx = ((i * gW / 4) + gFrm * .2) % gW, cy = gH * .12 + i * 25;
-                        gCtx.beginPath(); gCtx.arc(cx, cy, 20, 0, Math.PI * 2); gCtx.arc(cx + 18, cy - 5, 15, 0, Math.PI * 2); gCtx.arc(cx + 35, cy, 18, 0, Math.PI * 2); gCtx.fill()
-                    }
-                }
-
-                /* Mountains */
-                gCtx.fillStyle = dk ? '#0f0f2a' : '#81C784'; gCtx.beginPath(); gCtx.moveTo(0, gH - 25);
-                for (let x = 0; x <= gW; x += 100)gCtx.quadraticCurveTo(x + 50, gH - 80 - Math.sin(x * .01) * 30, x + 100, gH - 25);
-                gCtx.lineTo(gW, gH); gCtx.lineTo(0, gH); gCtx.fill();
-
-                /* Hills */
-                gCtx.fillStyle = dk ? '#141440' : '#A5D6A7'; gCtx.beginPath(); gCtx.moveTo(0, gH - 25);
-                for (let x = 0; x <= gW; x += 60)gCtx.quadraticCurveTo(x + 30, gH - 50 - Math.sin(x * .02) * 15, x + 60, gH - 25);
-                gCtx.lineTo(gW, gH); gCtx.lineTo(0, gH); gCtx.fill();
-
-                /* Ground */
-                gCtx.fillStyle = dk ? '#1a1a38' : '#66BB6A'; gCtx.fillRect(0, gH - 25, gW, 25);
-                gCtx.fillStyle = dk ? '#222255' : '#558B2F'; gCtx.fillRect(0, gH - 25, gW, 5);
-                /* Ground stripes */
-                gCtx.fillStyle = dk ? 'rgba(255,255,255,.03)' : 'rgba(0,0,0,.05)';
-                for (let x = (-gFrm * 2) % 40 - 40; x < gW; x += 40) { gCtx.fillRect(x, gH - 25, 20, 25) }
-
-                /* Pipes */
-                const g = pipeGap();
-                pipes.forEach(p => {
-                    const gr = gCtx.createLinearGradient(p.x, 0, p.x + pW, 0);
-                    gr.addColorStop(0, '#5B4FCF'); gr.addColorStop(.3, '#7C6FF0'); gr.addColorStop(.7, '#6C5CE7'); gr.addColorStop(1, '#4834D4');
-                    gCtx.fillStyle = gr;
-                    /* Top */
-                    gCtx.fillRect(p.x, 0, pW, p.topH);
-                    rRect(gCtx, p.x - 6, p.topH - 26, pW + 12, 26, 6); gCtx.fill();
-                    /* Bottom */
-                    const bY = p.topH + g;
-                    gCtx.fillStyle = gr;
-                    rRect(gCtx, p.x - 6, bY, pW + 12, 26, 6); gCtx.fill();
-                    gCtx.fillRect(p.x, bY + 20, pW, gH - bY - 45);
-                    /* Highlight */
-                    gCtx.fillStyle = 'rgba(255,255,255,.12)'; gCtx.fillRect(p.x + 5, 0, 7, p.topH - 26); gCtx.fillRect(p.x + 5, bY + 26, 7, gH - bY - 51);
-                    /* Shadow */
-                    gCtx.fillStyle = 'rgba(0,0,0,.1)'; gCtx.fillRect(p.x + pW - 7, 0, 7, p.topH - 26); gCtx.fillRect(p.x + pW - 7, bY + 26, 7, gH - bY - 51)
-                });
-
-                /* Bird */
-                gCtx.save(); gCtx.translate(bird.x, bird.y); gCtx.rotate(bird.rot * Math.PI / 180);
-                /* Shadow */
-                gCtx.fillStyle = 'rgba(0,0,0,.12)'; gCtx.beginPath(); gCtx.ellipse(3, bird.r + 8, bird.r * .8, 5, 0, 0, Math.PI * 2); gCtx.fill();
-                /* Body */
-                const bGrad = gCtx.createRadialGradient(-3, -3, 2, 0, 0, bird.r); bGrad.addColorStop(0, '#FFE44D'); bGrad.addColorStop(1, '#FFCC00');
-                gCtx.fillStyle = bGrad; gCtx.beginPath(); gCtx.arc(0, 0, bird.r, 0, Math.PI * 2); gCtx.fill();
-                gCtx.strokeStyle = 'rgba(0,0,0,.1)'; gCtx.lineWidth = 1; gCtx.stroke();
-                /* Belly */
-                gCtx.fillStyle = '#FFF3B0'; gCtx.beginPath(); gCtx.arc(2, 5, bird.r * .5, 0, Math.PI * 2); gCtx.fill();
-                /* Wing */
-                const wY = Math.sin(Date.now() * .012) * 4;
-                gCtx.fillStyle = '#F0A500'; gCtx.beginPath(); gCtx.ellipse(-6, -2 + wY, bird.r * .75, bird.r * .4, -.3, 0, Math.PI * 2); gCtx.fill();
-                /* Eye white */
-                gCtx.fillStyle = '#fff'; gCtx.beginPath(); gCtx.arc(6, -5, 7, 0, Math.PI * 2); gCtx.fill();
-                /* Eye pupil */
-                gCtx.fillStyle = '#222'; gCtx.beginPath(); gCtx.arc(8, -5, 3.5, 0, Math.PI * 2); gCtx.fill();
-                /* Eye glint */
-                gCtx.fillStyle = '#fff'; gCtx.beginPath(); gCtx.arc(9.5, -6.5, 1.5, 0, Math.PI * 2); gCtx.fill();
-                /* Beak */
-                gCtx.fillStyle = '#FF6B6B'; gCtx.beginPath(); gCtx.moveTo(bird.r - 2, -4); gCtx.lineTo(bird.r + 10, 0); gCtx.lineTo(bird.r - 2, 5); gCtx.closePath(); gCtx.fill();
-                gCtx.restore();
-
-                /* HUD Score */
-                gCtx.save(); gCtx.shadowColor = 'rgba(0,0,0,.5)'; gCtx.shadowBlur = 8; gCtx.shadowOffsetY = 2;
-                gCtx.fillStyle = '#fff'; const fontSize = Math.max(32, gH * .06); gCtx.font = `bold ${fontSize}px Poppins`;
-                gCtx.textAlign = 'center'; gCtx.fillText(gScore, gW / 2, fontSize + 20); gCtx.restore();
-
-                /* Start */
-                if (!gRun && !gOvr) {
-                    gCtx.fillStyle = 'rgba(0,0,0,.4)'; gCtx.fillRect(0, 0, gW, gH);
-                    const ts1 = Math.max(28, gH * .05), ts2 = Math.max(18, gH * .032), ts3 = Math.max(14, gH * .024);
-                    gCtx.fillStyle = '#fff'; gCtx.font = `bold ${ts1}px Poppins`; gCtx.textAlign = 'center';
-                    gCtx.fillText('🐦 Flappy Bird', gW / 2, gH / 2 - 50);
-                    gCtx.font = `500 ${ts2}px Poppins`; gCtx.fillStyle = 'rgba(255,255,255,.85)';
-                    gCtx.fillText('Tap or Press Space to Play', gW / 2, gH / 2 + 5);
-                    gCtx.font = `400 ${ts3}px Poppins`; gCtx.fillStyle = 'rgba(255,255,255,.5)';
-                    gCtx.fillText('Best Score: ' + gBest, gW / 2, gH / 2 + 45);
-                }
-
-                /* Game Over */
-                if (gOvr) {
-                    gCtx.fillStyle = 'rgba(0,0,0,.55)'; gCtx.fillRect(0, 0, gW, gH);
-                    const pnW = Math.min(320, gW * .8), pnH = Math.min(240, gH * .35);
-                    const pnX = (gW - pnW) / 2, pnY = (gH - pnH) / 2;
-                    gCtx.fillStyle = dk ? 'rgba(20,20,55,.95)' : 'rgba(255,255,255,.95)';
-                    gCtx.beginPath(); rRect(gCtx, pnX, pnY, pnW, pnH, 24); gCtx.fill();
-                    /* Border glow */
-                    gCtx.strokeStyle = 'rgba(108,92,231,.6)'; gCtx.lineWidth = 2; gCtx.beginPath(); rRect(gCtx, pnX, pnY, pnW, pnH, 24); gCtx.stroke();
-                    /* Text */
-                    const f1 = Math.max(28, pnH * .14), f2 = Math.max(22, pnH * .1), f3 = Math.max(17, pnH * .08), f4 = Math.max(14, pnH * .065);
-                    gCtx.textAlign = 'center';
-                    gCtx.fillStyle = '#ff6b6b'; gCtx.font = `bold ${f1}px Poppins`; gCtx.fillText('Game Over!', gW / 2, pnY + pnH * .28);
-                    gCtx.fillStyle = dk ? '#fff' : '#333'; gCtx.font = `600 ${f2}px Poppins`; gCtx.fillText('Score: ' + gScore, gW / 2, pnY + pnH * .5);
-                    gCtx.fillStyle = '#a29bfe'; gCtx.font = `500 ${f3}px Poppins`; gCtx.fillText('Best: ' + gBest, gW / 2, pnY + pnH * .68);
-                    gCtx.fillStyle = 'rgba(255,255,255,.55)'; gCtx.font = `400 ${f4}px Poppins`; gCtx.fillText('Tap to Restart', gW / 2, pnY + pnH * .88);
-                }
-            }
 
             function rRect(ctx, x, y, w, h, r) { ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r); ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h); ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r); ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y) }
 
